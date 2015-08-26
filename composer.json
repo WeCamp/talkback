@@ -5,20 +5,19 @@
     "license": "bsd",
     "authors": [
         {
-            "name": "Pascal de Vink",
-            "email": "pascal.de.vink@gmail.com"
+            "name": "Dennis Snijder"
         },
         {
-            "name": "Pascal de Vink",
-            "email": "pascal.de.vink@gmail.com"
+            "name": "Toby Griffiths"
         },
         {
-            "name": "Pascal de Vink",
-            "email": "pascal.de.vink@gmail.com"
+            "name": "Edwin Kortman"
         },
         {
-            "name": "Pascal de Vink",
-            "email": "pascal.de.vink@gmail.com"
+            "name": "Pascal de Vink"
+        },
+        {
+            "name": "Petra Dreiskämper"
         }
     ],
     "autoload": {
