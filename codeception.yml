@@ -8,10 +8,10 @@ settings:
     bootstrap: _bootstrap.php
     colors: true
     memory_limit: 1024M
-modules:
-    config:
-        Db:
-            dsn: 'sqllite:talkback.sqlite3'
-            user: ''
-            password: ''
-            dump: tests/_data/dump.sql
+#modules:
+#    config:
+#        Db:
+#            dsn: 'sqlite:talkback.sqlite3'
+#            user:
+#            password:
+#            dump: tests/_data/dump.sql
