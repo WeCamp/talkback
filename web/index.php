@@ -50,4 +50,13 @@ $app->get('/topics/{id}', function($id) use($app) {
 });
 
 
+/*some setup*/
+use Wecamp\TalkBack\Repository;
+$app->get('/setup', function() use($app){
+    $fixtures = new Wecamp\TalkBack\LoadFixtures(new Repository\UserRepository(), new Repository\TopicRepository(),
+        new Repository\BadgeRepository());
+    $fixtures->load();
+    return 'OK';
+});
+
 $app->run();
