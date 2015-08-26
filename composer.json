@@ -1,0 +1,33 @@
+{
+    "name": "wecamp/talkback",
+    "description": "A place for giving back talks.",
+    "minimum-stability": "stable",
+    "license": "bsd",
+    "authors": [
+        {
+            "name": "Pascal de Vink",
+            "email": "pascal.de.vink@gmail.com"
+        },
+        {
+            "name": "Pascal de Vink",
+            "email": "pascal.de.vink@gmail.com"
+        },
+        {
+            "name": "Pascal de Vink",
+            "email": "pascal.de.vink@gmail.com"
+        },
+        {
+            "name": "Pascal de Vink",
+            "email": "pascal.de.vink@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {"Wecamp\\TalkBack\\": "src/Wecamp/TalkBack/"}
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "require": {
+        "silex/silex": "^1.3"
+    }
+}
