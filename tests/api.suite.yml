@@ -1,0 +1,9 @@
+class_name: ApiTester
+modules:
+    enabled:
+        - ApiHelper
+        - REST:
+            url: http://localhost:8080
+            depends: PhpBrowser
+            # Don't bother loading the XML part of the module, as we're only supporting JSON at this stage
+            part: Json
