@@ -29,78 +29,77 @@ var formMethods = {
             </div>
         </div>
     },
-    getFormData: function() {
-        var data = {
-            name: this.refs.name.getDOMNode().value
-        }
-        return data
-    },
 }
 
-var ReactForm = React.createClass({
-    mixins: [formMethods],
-    getInitialState: function() {
-        return {
-            submitted: null
-        }
-    },
-    render: function() {
-        var submitted
-        if (this.state.submitted !== null) {
-            submitted = <div className="alert alert-success">
-                <p>Much submit. wow</p>
-            </div>
-        }
+function ReactForm(Component) {
+    return React.createClass({
+        mixins: [formMethods],
+        getInitialState: function() {
+            return {
+                submitted: null
+            }
+        },
+        render: function() {
+            var submitted
+            if (this.state.submitted !== null) {
+                submitted = <div className="alert alert-success">
+                    <p>Much submit. wow</p>
+                </div>
+            }
 
-        return <div>
-            <div className="panel panel-default">
-                <div className="panel-heading clearfix">
-                    <h3 className="panel-title pull-left">Add topic</h3>
-                </div>
-                <div className="panel-body">
-                    <AddTopic ref="addTopic"/>
-                </div>
-                <div className="panel-footer">
-                    <div className="row">
-                        <div className="col-md-2">
-                            <button type="button" className="btn btn-primary btn-block" onClick={this.handleSubmit}>Submit</button>
+            console.log(this.getInitialState());
+
+            return <div>
+                <div className="panel panel-default">
+                    <div className="panel-heading clearfix">
+                        <h3 className="panel-title pull-left">Add topic</h3>
+                    </div>
+                    <div className="panel-body">
+                        <Component />
+                    </div>
+                    <div className="panel-footer">
+                        <div className="row">
+                            <div className="col-md-2">
+                                <button type="button" className="btn btn-primary btn-block" onClick={this.handleSubmit}>Submit</button>
+                            </div>
                         </div>
                     </div>
                 </div>
+                {submitted}
             </div>
-            {submitted}
-        </div>
-    },
-    // isValid: function() {
-    //     var fields = ['name', 'excerpt', 'details'],
-    //         errors = {}
-    //     fields.forEach(function(field) {
-    //         var value = trim(this.refs[field].getDOMNode().value)
-    //         if (!value) {
-    //             errors[field] = 'This field is required'
-    //         }
-    //     }.bind(this))
-    //     this.setState({errors: errors})
-    //
-    //     var isValid = true
-    //     for (var error in errors) {
-    //         isValid = false
-    //         break
-    //     }
-    //     return isValid
-    // },
-    handleSubmit: function() {
-        // if (this.isValid()) {
-            this.setState({submitted: this.getFormData()})
-        // }
-    },
-});
+        },
+        isValid: function() {
+            var fields = ['name', 'excerpt', 'details'],
+                errors = {}
+            fields.forEach(function(field) {
+                var value = trim(this.refs[field].getDOMNode().value)
+                if (!value) {
+                    errors[field] = 'This field is required'
+                }
+            }.bind(this))
+            this.setState({errors: errors})
 
+            var isValid = true
+            for (var error in errors) {
+                isValid = false
+                break
+            }
+            return isValid
+        },
+        handleSubmit: function() {
+            if (this.isValid()) {
+                this.setState({submitted: this.getFormData()})
+            }
+        },
+    });
+}
 
 var AddTopic = React.createClass({
     mixins: [formMethods],
     getInitialState: function() {
-        return {errors: {}}
+        return {
+            errors: {}
+        }
     },
     render: function() {
         return <div className="form-horizontal">
@@ -115,7 +114,8 @@ var AddTopic = React.createClass({
     }
 });
 
-React.renderComponent(<ReactForm/>, document.getElementById('addtopicform'));
+var AddTopicForm = ReactForm(AddTopic);
+React.renderComponent(<AddTopicForm/>, document.getElementById('addtopicform'));
 
 
 // Utils
