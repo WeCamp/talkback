@@ -1,4 +1,4 @@
 /vendor/
 .idea
-
 tests/_output/*
+talkback.sqlite3
