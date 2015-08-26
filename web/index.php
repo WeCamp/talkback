@@ -5,6 +5,8 @@ require_once __DIR__.'/../vendor/autoload.php';
 $app = new Silex\Application();
 $app['debug'] = true;
 
+$app->register(new Silex\Provider\ServiceControllerServiceProvider());
+
 $app['topicRepository'] = $app->share(function() use ($app) {
     return new \Wecamp\TalkBack\Repository\TopicRepository();
 });
@@ -25,9 +27,13 @@ $app['fixtures'] = $app->share(function() use ($app) {
     );
 });
 
+$app['TopicController'] = $app->share(function() use ($app) {
+    return new Wecamp\TalkBack\Controller\TopicController($app);
+});
+
 $app->get('/', function() use($app) {
     return 'Hello World';
-});
+})->bind('homepage');
 
 $app->get('/setup', function() use($app) {
     /** @var \Wecamp\TalkBack\LoadFixtures $fixtures */
@@ -37,10 +43,7 @@ $app->get('/setup', function() use($app) {
     return 'Setup complete!';
 });
 
-$app->post('/topics', function() use($app) {
-    $topicController = new \Wecamp\TalkBack\Controller\TopicController();
-    return $topicController->newTopic();
-});
+$app->post('/topics', 'TopicController:newTopic');
 
 $app->get('/topics/{id}', function($id) use($app) {
     return $app->json($id);
