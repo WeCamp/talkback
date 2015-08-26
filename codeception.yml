@@ -11,7 +11,7 @@ settings:
 modules:
     config:
         Db:
-            dsn: ''
+            dsn: 'sqllite:talkback.sqlite3'
             user: ''
             password: ''
             dump: tests/_data/dump.sql
