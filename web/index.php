@@ -3,16 +3,18 @@
 require_once __DIR__.'/../vendor/autoload.php';
 
 $app = new Silex\Application();
+$app['debug'] = true;
 
 $app->get('/', function() use($app) {
     return 'Hello World';
 });
 
 $app->post('/topics', function() use($app) {
-    return $app->json('Hello');
+    $topicController = new \Wecamp\TalkBack\Controller\TopicController();
+    return $topicController->newTopic();
 });
 
-$app->post('/topics/{id}', function($id) use($app) {
+$app->get('/topics/{id}', function($id) use($app) {
     return $app->json($id);
 });
 
