@@ -5,24 +5,19 @@
     "license": "bsd",
     "authors": [
         {
-            "name": "Dennis Snijder",
-            "email": ""
+            "name": "Dennis Snijder"
         },
         {
-            "name": "Edwin Kortman",
-            "email": ""
+            "name": "Toby Griffiths"
         },
         {
-            "name": "Edwin Kortman",
-            "email": ""
+            "name": "Edwin Kortman"
         },
         {
-            "name": "Pascal de Vink",
-            "email": "pascal.de.vink@gmail.com"
+            "name": "Pascal de Vink"
         },
         {
-            "name": "Petra Dreiskämper",
-            "email": "",
+            "name": "Petra Dreiskämper"
         }
     ],
     "autoload": {
