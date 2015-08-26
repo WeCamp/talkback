@@ -49,5 +49,4 @@ $app->get('/topics/{id}', function($id) use($app) {
     return $app->json($id);
 });
 
-
 $app->run();

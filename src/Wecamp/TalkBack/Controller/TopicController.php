@@ -21,7 +21,7 @@ class TopicController
      */
     public function newTopic()
     {
-        return $this->app->json('HI');
+        return $this->app->json('OK');
     }
 
 }
