@@ -47,8 +47,6 @@ function ReactForm(Component) {
                 </div>
             }
 
-            console.log(this.getInitialState());
-
             return <div>
                 <div className="panel panel-default">
                     <div className="panel-heading clearfix">
