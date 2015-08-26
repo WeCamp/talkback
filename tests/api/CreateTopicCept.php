@@ -4,7 +4,11 @@ use Codeception\Module\ApiHelper;
 
 $I = new ApiTester($scenario);
 $I->wantTo('create a topic for me to talk about');
+
+// Headers
 $I->haveHttpHeader('Content-Type', 'application/json');
+
+// Submit
 $I->sendPOST(
     ApiHelper::ENDPOINT_TOPICS,
     [
@@ -16,5 +20,7 @@ $I->sendPOST(
         'owned_by_creator' => true,
     ]
 );
-$I->seeResponseCodeIs(200);
+
+// Response
+$I->seeResponseCodeIs(201);
 $I->seeResponseIsJson();
