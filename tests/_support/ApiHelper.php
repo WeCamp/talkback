@@ -6,5 +6,5 @@ namespace Codeception\Module;
 
 class ApiHelper extends \Codeception\Module
 {
-
+    const ENDPOINT_TOPICS = '/topics';
 }
