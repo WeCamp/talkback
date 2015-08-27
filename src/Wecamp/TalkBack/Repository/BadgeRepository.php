@@ -149,7 +149,7 @@ class BadgeRepository extends BaseRepository
     {
         $connection = $this->getConnection();
 
-        $insert = "SELECT  badge.name as badge, badge.icon, earned_badge.created_at FROM earned_badge INNER JOIN badge on earned_badge.badge = badge.id WHERE user=:userID";
+        $insert = "SELECT  badge.name as name, badge.icon, earned_badge.created_at FROM earned_badge INNER JOIN badge on earned_badge.badge = badge.id WHERE user=:userID";
         $stmt = $connection->prepare($insert);
 
         $stmt->bindParam(':userID', $userIdentifier);
