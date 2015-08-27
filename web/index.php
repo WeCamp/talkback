@@ -27,31 +27,16 @@ $app['fixtures'] = $app->share(function() use ($app) {
     );
 });
 
+$app->register(new Silex\Provider\TwigServiceProvider(), array(
+    'twig.path' => __DIR__.'/../views',
+));
+
 $app['TopicController'] = $app->share(function() use ($app) {
     return new Wecamp\TalkBack\Controller\TopicController($app);
 });
 
 $app->get('/', function() use($app) {
-    return <<<'EOF'
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Talkback</title>
-    <script src="/assets/js/vendor/JSXTransformer.js"></script>
-    <script src="/assets/js/vendor/react.min.js"></script>
-    <link rel="stylesheet" href="/assets/css/vendor/bootstrap.min.css">
-    <link rel="stylesheet" href="/assets/css/style.css">
-  </head>
-  <body>
-    <div class="container">
-      <div id="addtopicform"></div>
-    </div>
-    <script type="text/jsx" src="/assets/js/vendor/jquery-2.1.4.min.js"></script>
-    <script type="text/jsx" src="/assets/js/modules/methods.js"></script>
-    <script type="text/jsx" src="/assets/js/forms/addtopic.js"></script>
-  </body>
-</html>
-EOF;
+    return $app['twig']->render('addtopic.html.twig');
 })->bind('homepage');
 
 $app->get('/setup', function() use($app) {
