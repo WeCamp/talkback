@@ -4,7 +4,6 @@ namespace Wecamp\TalkBack\Controller;
 
 use Codeception\Module\Asserts;
 use Codeception\Module\Silex;
-use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Wecamp\TalkBack\Repository\TopicRepository;
@@ -21,7 +20,7 @@ class TopicController
     private $topicRepository;
 
     /**
-     * @var Application
+     * @var app
      */
     private $app;
 
@@ -49,14 +48,14 @@ class TopicController
             return new JsonResponse(array('error' => 'Could not create topic.'), 400);
         }
 
-        $topicIdentifier = $this->topicRepository->createTopic($data);
+        $topicID = $this->topicRepository->createTopic($data);
 
-        if($topicIdentifier === false) {
+        if($topicID === false) {
             return new JsonResponse(array('error' => 'Could not create topic.'), 503);
         }
 
         return new JsonResponse(array(
-            'id' => $topicIdentifier,
+            'id' => $topicID,
             'title' => $data['title'],
             'details' => $data['details'],
             'excerpt' => $data['excerpt'],
@@ -64,14 +63,27 @@ class TopicController
         ) , 201);
     }
 
+    /**
+     * @return JsonResponse
+     */
     public function getTopics()
     {
         return new JsonResponse($this->topicRepository->getTopics());
     }
 
+    /**
+     * @param $id
+     * @return JsonResponse
+     */
     public function getTopic($id)
     {
-        return new JsonResponse($this->topicRepository->getTopicWithId($id));
+        $topic = $this->topicRepository->getTopicByIdentifier($id);
+
+        if($topic === false) {
+            return new JsonResponse(array('error' => 'topic not found'), 404);
+        }
+
+        return new JsonResponse($topic, 200);
     }
 
 

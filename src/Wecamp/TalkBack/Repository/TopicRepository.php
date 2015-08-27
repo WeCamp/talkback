@@ -71,14 +71,10 @@ final class TopicRepository extends BaseRepository
 
     public function getTopics()
     {
-
-        $connection = $this->getConnection();
-        $insert = "";
-        $stmt = $connection->prepare($insert);
-
+        return '';
     }
 
-    public function getTopicWithId($id)
+    public function getTopicByIdentifier($id)
     {
         $connection = $this->getConnection();
         $insert = "SELECT topic.*, count(vote.voter) as vote_count FROM topic LEFT JOIN vote on topic.id = vote.topic
@@ -95,4 +91,7 @@ final class TopicRepository extends BaseRepository
             }
 
     }
+
+
+
 }
