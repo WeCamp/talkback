@@ -2,6 +2,7 @@
 
 namespace Wecamp\TalkBack\Controller;
 
+use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -9,7 +10,7 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Wecamp\TalkBack\Repository\TopicRepository;
 use Wecamp\TalkBack\Validate\TopicValidator;
 
-class TopicController
+class TopicController extends AbstractController
 {
 
     /**
@@ -18,7 +19,7 @@ class TopicController
     private $topicRepository;
 
     /**
-     * @var app
+     * @var Application
      */
     private $app;
 
