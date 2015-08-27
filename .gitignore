@@ -2,4 +2,5 @@
 .idea
 tests/_output/*
 talkback.sqlite3
+tests/_support/_generated
 .DS_Store

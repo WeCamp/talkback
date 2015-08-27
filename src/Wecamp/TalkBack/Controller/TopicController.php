@@ -45,7 +45,7 @@ class TopicController
         $topicValidate = new TopicValidate($this->app);
 
         if($topicValidate->validateTopic($data) !== true) {
-            return new JsonResponse(array('error' => 'Could not create topic.'), 503);
+            return new JsonResponse(array('error' => 'Could not create topic.'), 400);
         }
 
         $topicID = $this->topicRepository->createTopic($data);
@@ -63,10 +63,14 @@ class TopicController
         ) , 201);
     }
 
+    public function getTopics()
+    {
+        return new JsonResponse($this->topicRepository->getTopics());
+    }
 
     public function getTopic($id)
     {
-        return new JsonResponse(array('error' => 'Nothing here yet'), 503);
+        return new JsonResponse($this->topicRepository->getTopicWithID($id));
     }
 
 

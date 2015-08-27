@@ -30,7 +30,6 @@ class TopicValidate
 
         $errors = $this->app['validator']->validateValue($data, $constraint);
         if (count($errors) > 0) {
-            var_dump($errors);
             return $errors;
         } else {
             return true;
