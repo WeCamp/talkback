@@ -1,18 +1,47 @@
 /** @jsx React.DOM */
 
 var TopicRow = React.createClass({
+    getInitialState: function() {
+        return this.props;
+    },
     render: function() {
-        console.log(this.props.topic);
+        console.log(this.state);
         return <tr onClick={this.handleClick}>
-            <td>{this.props.topic.creator_name}</td>
-            <td>{this.props.topic.title}</td>
-            <td>{this.props.topic.excerpt}</td>
-            <td>{this.props.topic.created_at}</td>
-            <td>{this.props.topic.vote_count}</td>
+            <td>{this.state.topic.creator_name}</td>
+            <td>{this.state.topic.title}</td>
+            <td>{this.state.topic.excerpt}</td>
+            <td>{this.state.topic.created_at}</td>
+            <td onClick={this.vote}>
+                {this.state.topic.vote_count} <i className="fa fa-thumbs-up"></i>
+            </td>
         </tr>
     },
-    handleClick: function() {
+    handleClick: function(event) {
         window.location.href = '/topic/' + this.props.topic.id;
+    },
+    vote: function(event) {
+        event.stopPropagation();
+
+        var url = '/api/topics/' + this.state.topic.id + '/vote';
+        var data = {
+            topic: this.state.topic.id
+        };
+
+        var self = this;
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: data,
+            success: function(data) {
+                var topic = self.state.topic;
+                topic.vote_count = parseInt(topic.vote_count) + 1;
+                self.setState({topic: topic});
+            },
+            error: function(jqXHR, status, error) {
+                console.log(status, jqXHR.responseJSON, error);
+            }.bind(this)
+        });
     }
 });
 
@@ -30,7 +59,6 @@ var TopicList = React.createClass({
         }.bind(this));
     },
     render: function() {
-        console.log(this.state);
         return <div className="panel panel-default">
             <div className="panel-heading clearfix">
                 <h3 className="panel-title pull-left">Topics</h3>

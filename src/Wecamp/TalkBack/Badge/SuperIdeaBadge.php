@@ -3,6 +3,7 @@
 namespace Wecamp\TalkBack\Badge;
 
 use Wecamp\TalkBack\Event\TopicAddedEvent;
+use Wecamp\TalkBack\Repository\BadgeRepository;
 
 class SuperIdeaBadge implements Badge
 {

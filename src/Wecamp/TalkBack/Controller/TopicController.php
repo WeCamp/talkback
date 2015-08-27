@@ -9,13 +9,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Wecamp\TalkBack\Event\TopicAddedEvent;
+use Wecamp\TalkBack\Event\TopicCommentAddedEvent;
 use Wecamp\TalkBack\Repository\TopicRepository;
 use Wecamp\TalkBack\Validate\CommentValidator;
 use Wecamp\TalkBack\Validate\TopicValidator;
 
 class TopicController extends AbstractController
 {
-
     /**
      * @var TopicRepository
      */
@@ -42,7 +42,6 @@ class TopicController extends AbstractController
         $this->topicValidator   = $topicValidator;
         $this->dispatcher = $dispatcher;
     }
-
 
     /**
      * Creates a new topic
@@ -87,7 +86,6 @@ class TopicController extends AbstractController
         );
     }
 
-
     /**
      * @return JsonResponse
      */
@@ -101,7 +99,6 @@ class TopicController extends AbstractController
 
         return new JsonResponse($topics, 200);
     }
-
 
     /**
      * @param $id
@@ -121,14 +118,12 @@ class TopicController extends AbstractController
         return new JsonResponse($topic, 200);
     }
 
-
     /**
      * @param Request $request
      * @return JsonResponse
      */
     public function newComment(Request $request)
     {
-
         $data             = $request->request->all();
         $commentValidator = new CommentValidator($this->app['validator']);
 
@@ -138,26 +133,26 @@ class TopicController extends AbstractController
             return $this->getInvalidDataResponse($lastErrors);
         }
 
-        $commentID = $this->topicRepository->createComment($data);
+        $commentId = $this->topicRepository->createComment($data);
 
-        if ($commentID === false) {
+        if ($commentId === false) {
             return new JsonResponse(['error' => 'Could not create comment.'], 503);
         }
 
-        $newData = $this->topicRepository->getCommentByIdentifier($commentID);
+        $this->dispatcher->dispatch('topic.comment', new TopicCommentAddedEvent($data['user']));
+
+        $newData = $this->topicRepository->getCommentByIdentifier($commentId);
 
         return new JsonResponse(
             [
-                'id'               => $commentID,
+                'id'               => $commentId,
                 'topic'            => $newData['topic'],
                 'commenter'        => $newData['commenter'],
                 'content'          => $newData['content'],
                 'created_at'       => $newData['created_at']
             ], 201
         );
-
     }
-
 
     /**
      * @param $id
@@ -200,7 +195,18 @@ class TopicController extends AbstractController
         );
     }
 
+    public function addVote(Request $request)
+    {
+        $data         = $request->request->all();
+        $data['user'] = 2;
 
+        $success = $this->topicRepository->addVote($data['topic'], $data['user'], new \DateTime());
 
+        if ($success === false) {
+            return new JsonResponse(['error' => 'Could not create vote.'], 503);
+        }
+
+        return new JsonResponse('ok', 201);
+    }
 }
 

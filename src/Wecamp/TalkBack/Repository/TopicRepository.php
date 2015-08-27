@@ -109,7 +109,6 @@ final class TopicRepository extends BaseRepository
             }
     }
 
-
     /**
      * @param $topicIdentifier
      * @return array|bool
@@ -157,7 +156,6 @@ final class TopicRepository extends BaseRepository
         }
     }
 
-
     /**
      * @param $id
      * @return false|array
@@ -180,4 +178,32 @@ final class TopicRepository extends BaseRepository
         }
     }
 
+    /**
+     * @param int $topic
+     * @param int $user
+     * @param \DateTime $createdAt
+     *
+     * @return bool
+     */
+    public function addVote($topic, $user, \DateTime $createdAt)
+    {
+        $connection = $this->getConnection();
+        $format = $createdAt->format('Y-m-d H:i:s');
+
+        $insert = "INSERT INTO vote (topic, voter, created_at)
+                VALUES (:topic, :voter, :created_at)";
+        $stmt = $connection->prepare($insert);
+
+        $stmt->bindParam(':topic', $topic);
+        $stmt->bindParam(':voter', $user);
+        $stmt->bindParam(':created_at', $format);
+
+        try {
+            $stmt->execute();
+            return true;
+        }catch(\PDOException $e) {
+            //todo: log this!
+            return false;
+        }
+    }
 }
