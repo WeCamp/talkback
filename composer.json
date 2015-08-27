@@ -32,6 +32,7 @@
         "twig/twig": "^1.21"
     },
     "require-dev": {
-        "codeception/codeception": "^2.1"
+        "codeception/codeception": "^2.1",
+        "flow/jsonpath": "^0.3.0"
     }
 }
