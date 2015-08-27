@@ -111,6 +111,13 @@ var CommentList = React.createClass({
     },
 });
 
+var CommentForm = React.createClass({
+    mixins: [formMethods],
+    render: function(){
+        return <p>Comments form!</p>;
+    }
+});
+
 var showTopic = document.getElementById('showtopic');
 React.render(
     <ShowTopic source="/api/topics/" />,
