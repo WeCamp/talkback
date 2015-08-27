@@ -142,6 +142,17 @@ class TopicController extends AbstractController
      */
     public function newComment(Request $request, $topicId)
     {
+        $topic = $this->topicRepository->getTopicByIdentifier($topicId);
+
+        if (empty($topic)) {
+            return new JsonResponse(
+                [
+                    'errors' => [
+                        ['message' => 'Topic not found'],
+                    ],
+                ], 404
+            );
+        }
 
         $data             = $request->request->all();
         $commentValidator = new CommentValidator($this->app['validator']);
