@@ -14,6 +14,7 @@ var ShowTopic = React.createClass({
             }
         };
     },
+
     componentDidMount: function() {
         var showTopic = document.getElementById('showtopic');
         var topicId = showTopic.getAttribute('data-topicid');
@@ -24,6 +25,7 @@ var ShowTopic = React.createClass({
             }
         }.bind(this));
     },
+
     render: function() {
         return <div>
             <div className="panel panel-default">
@@ -53,27 +55,49 @@ var ShowTopic = React.createClass({
                     </div>
                 </div>
             </div>
-            <Comments source="/api/topics/"/>
+            <Comments topic={this.state.topic}/>
         </div>
     }
 });
 
 
 var Comments = React.createClass({
+
     getInitialState: function(){
         return {
+            topic: undefined,
             data: {
                 comments: []
             }
         };
     },
-    componentDidMount: function() {
-        var topicId = document.getElementById('showtopic').getAttribute('data-topicid');
 
-        $.get(this.props.source + topicId, function (result) {
+    componentWillReceiveProps: function(props) {
+        if (this.isMounted()) {
+            this.setState({
+                topic: props.topic
+            }, function(){
+                this.updateComments()
+            });
+        }
+    },
+
+    componentDidMount: function() {
+        this.updateComments();
+    },
+
+    updateComments: function(){
+
+        if (undefined === this.state.topic || undefined === this.state.topic.id) {
+            console.log('Not updating comments, as no topic set');
+            return;
+        }
+
+        var topicId = this.props.topic.id;
+
+        $.get('/api/topics/' + topicId, function (result) {
             if (this.isMounted()) {
                 this.setState({
-                    topicId : topicId,
                     data: {
                         comments: result.comments
                     }
@@ -81,21 +105,19 @@ var Comments = React.createClass({
             }
         }.bind(this));
     },
-    render: function() {
 
-        var commentForm = <CommentForm topicId={this.state.topicId}/>,
-            commentList = <CommentList comments={this.state.data.comments}/>;
+    render: function() {
 
         return <div>
 
-            {commentForm}
+            <CommentForm topic={this.state.topic} parent={this}/>
 
             <div className="panel panel-default">
                 <div className="panel-heading clearfix">
                     <h3 className="panel-title pull-left">Comments</h3>
                 </div>
                 <div className="panel-body">
-                    {commentList}
+                    <CommentList comments={this.state.data.comments}/>
                 </div>
             </div>
         </div>
