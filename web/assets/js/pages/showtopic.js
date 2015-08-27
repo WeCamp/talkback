@@ -82,16 +82,20 @@ var Comments = React.createClass({
         }.bind(this));
     },
     render: function() {
+
+        var commentForm = <CommentForm topicId={this.state.topicId}/>,
+            commentList = <CommentList comments={this.state.data.comments}/>;
+
         return <div>
 
-            <CommentForm topicId={this.state.topicId}/>
+            {commentForm}
 
             <div className="panel panel-default">
                 <div className="panel-heading clearfix">
                     <h3 className="panel-title pull-left">Comments</h3>
                 </div>
                 <div className="panel-body">
-                    <CommentList comments={this.state.data.comments}/>
+                    {commentList}
                 </div>
             </div>
         </div>
