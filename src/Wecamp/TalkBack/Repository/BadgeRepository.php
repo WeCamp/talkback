@@ -136,4 +136,30 @@ class BadgeRepository extends BaseRepository
             var_dump($e);
         }
     }
+
+
+    /**
+     * get's the user earned badges
+     *
+     * @param $userIdentifier
+     *
+     * @return false|array
+     */
+    public function getEarnedBadges($userIdentifier)
+    {
+        $connection = $this->getConnection();
+
+        $insert = "SELECT  badge.name as badge, badge.icon, earned_badge.created_at FROM earned_badge INNER JOIN badge on earned_badge.badge = badge.id WHERE user=:userID";
+        $stmt = $connection->prepare($insert);
+
+        $stmt->bindParam(':userID', $userIdentifier);
+
+        try{
+            $stmt->execute();
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        }catch(\PDOException $e){
+            //todo: log this!
+            return false;
+        }
+    }
 }

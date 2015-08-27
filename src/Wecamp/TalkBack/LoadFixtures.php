@@ -87,6 +87,14 @@ class LoadFixtures
             ],
         ];
 
+        $earnedBadges = [
+            [
+                'user' => 1,
+                'badge' => 1,
+                'created_at' => '2015-08-26 16:01:22',
+            ],
+        ];
+
         foreach ($users as $user) {
             $this->insertUser($user);
         }
@@ -105,6 +113,10 @@ class LoadFixtures
 
         foreach ($badges as $badge) {
             $this->insertBadge($badge);
+        }
+
+        foreach ($earnedBadges as $earnedBadge) {
+            $this->insertEarnedBadge($earnedBadge);
         }
 
     }
@@ -177,6 +189,21 @@ class LoadFixtures
         $stmt = $connection->prepare($insert);
         $stmt->bindParam(':name', $entity['name']);
         $stmt->bindParam(':icon', $entity['icon']);
+
+        $stmt->execute();
+    }
+
+
+    private function insertEarnedBadge(array $entity)
+    {
+        $connection = $this->badgeRepository->getConnection();
+
+        $insert = "INSERT INTO earned_badge (user, badge, created_at)
+                VALUES (:user, :badge, :created_at)";
+        $stmt = $connection->prepare($insert);
+        $stmt->bindParam(':user', $entity['user']);
+        $stmt->bindParam(':badge', $entity['badge']);
+        $stmt->bindParam(':created_at', $entity['created_at']);
 
         $stmt->execute();
     }
