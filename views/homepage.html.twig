@@ -4,6 +4,6 @@
     <h1>Homepage</h1>
 
     <ul>
-        <li><a href="/topics">Topics</a></li>
+        <li><a href="{{ app.url_generator.generate('topiclist') }}">Topics</a></li>
     </ul>
 {% endblock %}
