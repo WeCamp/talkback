@@ -58,6 +58,8 @@ $app['superIdeaBadge'] = $app->share(function() use ($app) {
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__.'/../views',
 ));
+$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
+
 
 $app['TopicController'] = $app->share(function() use ($app) {
     return new \Wecamp\TalkBack\Controller\TopicController($app['topicRepository'], $app['topicValidator'], $app['dispatcher']);
