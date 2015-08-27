@@ -24,11 +24,11 @@ $I->sendPOST(ApiHelper::ENDPOINT_TOPICS, $testPostData);
 // Response
 $I->seeResponseCodeIs(201);
 $I->seeResponseIsJson();
-$jsonResponse = $I->grabDataFromResponseByJsonPath('$');
 $I->canSeeResponseJsonMatchesJsonPath('$.id');
-$I->assertEquals($testPostData['details'], $I->grabDataFromResponseByJsonPath('$.details'));
-$I->assertEquals($testPostData['excerpt'], $I->grabDataFromResponseByJsonPath('$.excerpt'));
-$I->assertEquals($testPostData['owned_by_creator'], $I->grabDataFromResponseByJsonPath('$.owned_by_creator'));
+$I->assertEquals($testPostData['details'], $I->grabDataFromResponseByJsonPath('$.details')[0]);
+$I->assertEquals($testPostData['excerpt'], $I->grabDataFromResponseByJsonPath('$.excerpt')[0]);
+$I->assertEquals($testPostData['owned_by_creator'], $I->grabDataFromResponseByJsonPath('$.owned_by_creator')[0]);
 $I->canSeeResponseJsonMatchesJsonPath('$.created_at');
 
 // Db record
+$I->seeInDatabase('topic', $testPostData);

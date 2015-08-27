@@ -49,6 +49,10 @@ $app->get('/', function() use($app) {
     return $app['twig']->render('homepage.html.twig');
 })->bind('homepage');
 
+$app->get('/topics', function() use($app) {
+    return $app['twig']->render('topiclist.html.twig');
+})->bind('topiclist');
+
 $app->get('/topic/{id}', function($id) use($app) {
     return $app['twig']->render('showtopic.html.twig', ['id' => $id]);
 })->bind('showtopic');
