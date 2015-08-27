@@ -155,9 +155,9 @@ class TopicController extends AbstractController
         }
 
         $data             = $request->request->all();
-        $commentValidator = new CommentValidator($this->app['validator']);
+        $commentValidator = $this->commentValidator;
 
-        if ($commentValidator->isNewCommentValid($data) !== true) {
+        if ($this->commentValidator->isNewCommentValid($data) !== true) {
             $lastErrors = $commentValidator->getLastErrors();
 
             return $this->getInvalidDataResponse($lastErrors);
