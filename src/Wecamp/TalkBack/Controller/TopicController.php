@@ -126,7 +126,7 @@ class TopicController extends AbstractController
         $commentID = $this->getTopicRepository()->createComment($data);
 
         if ($commentID === false) {
-            return new JsonResponse(['error' => 'Could not create comment.'], 503);
+            return new JsonResponse(['error' => 'Could not create comment.'], 400);
         }
 
         $newData = $this->getTopicRepository()->getCommentByIdentifier($commentID);
