@@ -2,18 +2,23 @@
 
 var ShowTopic = React.createClass({
     getInitialState: function() {
-        return {topic: {
-            title: '',
-            details: '',
-            excerpt: '',
-            creator: '',
-            vote_count: 0,
-            created_at: ''
-        }};
+        return {
+            topic: {
+                id: 0,
+                title: '',
+                details: '',
+                excerpt: '',
+                creator: '',
+                vote_count: 0,
+                created_at: ''
+            }
+        };
     },
     componentDidMount: function() {
-        console.log(this.refs);
-        $.get(this.props.source, function(result) {
+        var showTopic = document.getElementById('showtopic');
+        var topicId = showTopic.getAttribute('data-topicid');
+
+        $.get(this.props.source + topicId, function(result) {
             if (this.isMounted()) {
                 this.setState({topic: result});
             }
@@ -34,8 +39,8 @@ var ShowTopic = React.createClass({
     }
 });
 
-var showTopic = document.getElementById('showtopic')
+var showTopic = document.getElementById('showtopic');
 React.render(
-    <ShowTopic source="/api/topics/1"  />,
+    <ShowTopic source="/api/topics/"  />,
     showTopic
 );
