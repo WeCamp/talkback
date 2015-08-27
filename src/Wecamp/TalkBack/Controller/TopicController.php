@@ -32,15 +32,28 @@ class TopicController extends AbstractController
     private $dispatcher;
 
     /**
+     * @var CommentValidator
+     */
+    private $commentValidator;
+
+
+    /**
      * @param TopicRepository $topicRepository
      * @param TopicValidator $topicValidator
+     * @param CommentValidator $commentValidator
      * @param EventDispatcher $dispatcher
      */
-    public function __construct(TopicRepository $topicRepository, TopicValidator $topicValidator, EventDispatcher $dispatcher)
+    public function __construct(
+        TopicRepository $topicRepository,
+        TopicValidator $topicValidator,
+        CommentValidator $commentValidator,
+        EventDispatcher $dispatcher
+    )
     {
         $this->topicRepository  = $topicRepository;
         $this->topicValidator   = $topicValidator;
-        $this->dispatcher = $dispatcher;
+        $this->commentValidator = $commentValidator;
+        $this->dispatcher       = $dispatcher;
     }
 
 

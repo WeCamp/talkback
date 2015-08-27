@@ -3,6 +3,7 @@
 require_once __DIR__.'/../vendor/autoload.php';
 
 use Symfony\Component\HttpFoundation\Request;
+use Wecamp\TalkBack\Validate\CommentValidator;
 use Wecamp\TalkBack\Validate\TopicValidator;
 
 $app = new Silex\Application();
@@ -42,6 +43,9 @@ $app['fixtures'] = $app->share(function() use ($app) {
 $app['topicValidator'] = function() use ($app) {
     return new TopicValidator($app['validator']);
 };
+$app['commentValidator'] = function() use ($app) {
+    return new CommentValidator($app['validator']);
+};
 
 // Badges
 
@@ -65,7 +69,12 @@ $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
  * API Controllers & routes
  */
 $app['TopicController'] = $app->share(function() use ($app) {
-    return new \Wecamp\TalkBack\Controller\TopicController($app['topicRepository'], $app['topicValidator'], $app['dispatcher']);
+    return new \Wecamp\TalkBack\Controller\TopicController(
+        $app['topicRepository'],
+        $app['topicValidator'],
+        $app['commentValidator'],
+        $app['dispatcher']
+    );
 });
 
 // Topic
