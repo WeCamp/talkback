@@ -35,4 +35,49 @@ final class TopicRepository extends BaseRepository
                     content TEXT,
                     created_at TEXT)");
     }
+
+
+    /**
+     * @param $data
+     * @return bool|string
+     */
+    public function createTopic($data)
+    {
+        $createdAt = new \DateTime();
+        $connection = $this->getConnection();
+        $format = $createdAt->format('Y-m-d H:i:s');
+        $tempUser = 1;
+
+        $insert = "INSERT INTO topic (title, details, excerpt,creator, owned_by_creator, created_at)
+                VALUES (:title, :excerpt, :details, :creator, :ownedByCreator, :createdAt)";
+        $stmt = $connection->prepare($insert);
+
+        $stmt->bindParam(':title', $data['title']);
+        $stmt->bindParam(':details', $data['details']);
+        $stmt->bindParam(':excerpt', $data['excerpt']);
+        $stmt->bindParam(':creator', $tempUser);
+        $stmt->bindParam(':ownedByCreator', $data['owned_by_creator']);
+        $stmt->bindParam('createdAt', $format);
+        try {
+            $stmt->execute();
+            return $connection->lastInsertId();
+        }catch(\PDOException $e) {
+            //todo: log this!
+            return false;
+        }
+    }
+
+
+    public function getTopics()
+    {
+
+    }
+
+    public function getTopicWithID($id)
+    {
+
+    }
+
+
+
 }
