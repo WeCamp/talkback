@@ -41,7 +41,7 @@ final class TopicRepository extends BaseRepository
      * @param $data
      * @return bool|string
      */
-    public function createTopic($data)
+    public function createTopic(array $data)
     {
         $createdAt = new \DateTime();
         $connection = $this->getConnection();
@@ -136,8 +136,53 @@ final class TopicRepository extends BaseRepository
         }
     }
 
-    
+    public function createComment(array $data)
     {
+        $createdAt = new \DateTime();
+        $connection = $this->getConnection();
+        $format = $createdAt->format('Y-m-d H:i:s');
+        $tempUser = 2;
+
+        $insert = "INSERT INTO comment (topic, commenter, content, created_at)
+                VALUES (:topic, :commenter, :content, :created_at)";
+        $stmt = $connection->prepare($insert);
+
+        $stmt->bindParam(':topic', $data['topic']);
+        $stmt->bindParam(':commenter', $tempUser);
+        $stmt->bindParam(':content', $data['content']);
+        $stmt->bindParam(':created_at', $format);
+
+        try {
+            $stmt->execute();
+            return $connection->lastInsertId();
+        }catch(\PDOException $e) {
+            //todo: log this!
+            return false;
+        }
+    }
+
+
+    /**
+     * @param $id
+     * @return false|array
+     */
+    public function getCommentByIdentifier($id)
+    {
+        $connection = $this->getConnection();
+
+        $insert = "SELECT comment.id, comment.topic, comment.content, comment.created_at, user.name as commenter
+        FROM comment LEFT JOIN user on user.id = comment.commenter WHERE comment.id=:id";
+        $stmt = $connection->prepare($insert);
+        $stmt->bindParam(':id', $id);
+
+        try {
+            $stmt->execute();
+            return $stmt->fetch(\PDO::FETCH_ASSOC);
+        }catch(\PDOException $e) {
+            //todo: log this!
+            return false;
+        }
+    }
 
 
 
