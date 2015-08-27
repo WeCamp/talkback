@@ -89,17 +89,25 @@ var Comments = React.createClass({
     updateComments: function(){
 
         if (undefined === this.state.topic || undefined === this.state.topic.id) {
-            console.log('Not updating comments, as no topic set');
+            // Not updating comments, as no topic set
             return;
         }
 
         var topicId = this.props.topic.id;
 
         $.get('/api/topics/' + topicId, function (result) {
+            var comments = result.comments;
+
             if (this.isMounted()) {
+
+                // Sort by date DESC
+                comments = comments.sort(function(a, b){
+                    return (a.created_at > b.created_at) ? -1 : 1;
+                });
+
                 this.setState({
                     data: {
-                        comments: result.comments
+                        comments: comments
                     }
                 });
             }
@@ -206,8 +214,17 @@ var CommentForm = React.createClass({
             url: comment_new_url,
             data: data,
             success: function(data) {
-                alert('Done!');
-                //window.location.href = '/';
+
+                if (undefined == this.props.parent) {
+                    return;
+                }
+
+                // Clear form
+                this.refs.content.getDOMNode().value = '';
+
+                // Reload comments
+                this.props.parent.updateComments();
+
             }.bind(this),
             error: function(jqXHR, status, error) {
                 console.log(status, jqXHR.responseJSON, error);
