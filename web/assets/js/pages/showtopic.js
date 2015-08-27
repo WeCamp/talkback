@@ -149,6 +149,12 @@ var CommentForm = React.createClass({
         </div>;
     },
 
+    getFormData: function() {
+        return {
+            content: this.refs.content.getDOMNode().value
+        };
+    },
+
     handleSubmit: function() {
         alert('Yay!');
     }
