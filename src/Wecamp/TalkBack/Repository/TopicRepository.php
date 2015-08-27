@@ -36,7 +36,6 @@ final class TopicRepository extends BaseRepository
                     created_at TEXT)");
     }
 
-
     /**
      * @param $data
      * @return bool|string
@@ -46,7 +45,6 @@ final class TopicRepository extends BaseRepository
         $createdAt = new \DateTime();
         $connection = $this->getConnection();
         $format = $createdAt->format('Y-m-d H:i:s');
-        $tempUser = 1;
 
         $insert = "INSERT INTO topic (title, excerpt, details,creator, owned_by_creator, created_at)
                 VALUES (:title, :excerpt, :details, :creator, :ownedByCreator, :createdAt)";
@@ -55,7 +53,7 @@ final class TopicRepository extends BaseRepository
         $stmt->bindParam(':title', $data['title']);
         $stmt->bindParam(':details', $data['details']);
         $stmt->bindParam(':excerpt', $data['excerpt']);
-        $stmt->bindParam(':creator', $tempUser);
+        $stmt->bindParam(':creator', $data['user']);
         $stmt->bindParam(':ownedByCreator', $data['owned_by_creator']);
         $stmt->bindParam(':createdAt', $format);
 
@@ -67,7 +65,6 @@ final class TopicRepository extends BaseRepository
             return false;
         }
     }
-
 
     /**
      * @return array|bool
@@ -87,7 +84,6 @@ final class TopicRepository extends BaseRepository
             //todo: log this!
             return false;
         }
-
     }
 
     /**
@@ -183,8 +179,5 @@ final class TopicRepository extends BaseRepository
             return false;
         }
     }
-
-
-
 
 }

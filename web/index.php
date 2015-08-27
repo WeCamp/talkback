@@ -3,6 +3,7 @@
 require_once __DIR__.'/../vendor/autoload.php';
 
 use Symfony\Component\HttpFoundation\Request;
+use Wecamp\TalkBack\Validate\TopicValidator;
 
 $app = new Silex\Application();
 $app['debug'] = true;
@@ -37,12 +38,31 @@ $app['fixtures'] = $app->share(function() use ($app) {
     );
 });
 
+// Validators
+$app['topicValidator'] = function() use ($app) {
+    return new TopicValidator($app['validator']);
+};
+
+// Badges
+
+$app['storeEventSubscriber'] = $app->share(function() use ($app) {
+    return new \Wecamp\TalkBack\Subscriber\StoreEventSubscriber($app['badgeRepository']);
+});
+
+$app['superIdeaBadge'] = $app->share(function() use ($app) {
+    return new \Wecamp\TalkBack\Badge\SuperIdeaBadge();
+});
+
+// Twig
+
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__.'/../views',
 ));
+$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
+
 
 $app['TopicController'] = $app->share(function() use ($app) {
-    return new \Wecamp\TalkBack\Controller\TopicController($app, $app['topicRepository']);
+    return new \Wecamp\TalkBack\Controller\TopicController($app['topicRepository'], $app['topicValidator'], $app['dispatcher']);
 });
 
 $app->get('/', function() use($app) {
@@ -53,13 +73,13 @@ $app->get('/topics', function() use($app) {
     return $app['twig']->render('topiclist.html.twig');
 })->bind('topiclist');
 
-$app->get('/topic/{id}', function($id) use($app) {
-    return $app['twig']->render('showtopic.html.twig', ['id' => $id]);
-})->bind('showtopic');
-
 $app->get('/topic/add', function() use($app) {
     return $app['twig']->render('addtopic.html.twig');
 })->bind('addtopic');
+
+$app->get('/topic/{id}', function($id) use($app) {
+    return $app['twig']->render('showtopic.html.twig', ['id' => $id]);
+})->bind('showtopic');
 
 $app->get('/setup', function() use($app) {
     /** @var \Wecamp\TalkBack\LoadFixtures $fixtures */
@@ -74,5 +94,10 @@ $app->post('/api/comments', 'TopicController:newComment');
 $app->get('/api/comments/{id}', 'TopicController:getCommentByIdentifier');
 $app->get('/api/topics/{id}', 'TopicController:getTopicByIdentifier');
 $app->get('/api/topics', 'TopicController:getAllTopics');
+
+/** @var \Symfony\Component\EventDispatcher\EventDispatcher $dispatcher */
+$dispatcher = $app['dispatcher'];
+$dispatcher->addSubscriber($app['storeEventSubscriber']);
+$dispatcher->addSubscriber($app['superIdeaBadge']);
 
 $app->run();
