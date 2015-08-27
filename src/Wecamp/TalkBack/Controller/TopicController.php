@@ -183,5 +183,21 @@ class TopicController extends AbstractController
 
         return new JsonResponse('ok', 201);
     }
+
+
+    /**
+     * @return JsonResponse
+     */
+    public function getAllDetailedTopics()
+    {
+        $topics = $this->topicRepository->getAllDetailedTopics();
+
+        if($topics === false) {
+            return new JsonResponse(array('error' => 'No topics found'), 404);
+        }
+
+        return new JsonResponse($topics, 200);
+    }
+
 }
 
