@@ -50,7 +50,7 @@ $app['storeEventSubscriber'] = $app->share(function() use ($app) {
 });
 
 $app['superIdeaBadge'] = $app->share(function() use ($app) {
-    return new \Wecamp\TalkBack\Badge\SuperIdeaBadge();
+    return new \Wecamp\TalkBack\Badge\SuperIdeaBadge($app['badgeRepository']);
 });
 
 // Twig
