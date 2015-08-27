@@ -8,7 +8,7 @@
 
 namespace Wecamp\TalkBack\Controller;
 
-use Symfony\Component\Console\Application;
+use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
