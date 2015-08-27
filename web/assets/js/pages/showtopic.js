@@ -84,6 +84,14 @@ var Comments = React.createClass({
         return <div>
             <div className="panel panel-default">
                 <div className="panel-heading clearfix">
+                    <h3 className="panel-title pull-left">Give Feedback</h3>
+                </div>
+                <div className="panel-body">
+                    <CommentForm/>
+                </div>
+            </div>
+            <div className="panel panel-default">
+                <div className="panel-heading clearfix">
                     <h3 className="panel-title pull-left">Comments</h3>
                 </div>
                 <div className="panel-body">
