@@ -186,7 +186,7 @@ var CommentForm = React.createClass({
             success: function(data) {
                 alert('Done!');
                 //window.location.href = '/';
-            },
+            }.bind(this),
             error: function(jqXHR, status, error) {
                 console.log(status, jqXHR.responseJSON, error);
             }.bind(this)
