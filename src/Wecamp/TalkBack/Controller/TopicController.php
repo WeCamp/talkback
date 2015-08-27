@@ -10,6 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Wecamp\TalkBack\Event\TopicAddedEvent;
 use Wecamp\TalkBack\Repository\TopicRepository;
+use Wecamp\TalkBack\Validate\CommentValidator;
 use Wecamp\TalkBack\Validate\TopicValidator;
 
 class TopicController extends AbstractController
@@ -110,15 +111,69 @@ class TopicController extends AbstractController
     public function getTopicByIdentifier($id)
     {
         $topic = $this->topicRepository->getTopicByIdentifier($id);
-        $topic['comments'] = $this->topicRepository->getCommentsForTopic($id);
 
         if ($topic === false) {
             return new JsonResponse(['error' => 'topic not found'], 404);
         }
 
+        $topic['comments'] = $this->topicRepository->getCommentsForTopic($id);
+
         return new JsonResponse($topic, 200);
     }
 
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function newComment(Request $request)
+    {
+
+        $data             = $request->request->all();
+        $commentValidator = new CommentValidator($this->app['validator']);
+
+        if ($commentValidator->isNewCommentValid($data) !== true) {
+            $lastErrors = $commentValidator->getLastErrors();
+
+            return $this->getInvalidDataResponse($lastErrors);
+        }
+
+        $commentID = $this->topicRepository->createComment($data);
+
+        if ($commentID === false) {
+            return new JsonResponse(['error' => 'Could not create comment.'], 503);
+        }
+
+        $newData = $this->topicRepository->getCommentByIdentifier($commentID);
+
+        return new JsonResponse(
+            [
+                'id'               => $commentID,
+                'topic'            => $newData['topic'],
+                'commenter'        => $newData['commenter'],
+                'content'          => $newData['content'],
+                'created_at'       => $newData['created_at']
+            ], 201
+        );
+
+    }
+
+
+    /**
+     * @param $id
+     *
+     * @return JsonResponse
+     */
+    public function getCommentByIdentifier($id)
+    {
+        $comment = $this->topicRepository->getCommentByIdentifier($id);
+
+        if ($comment === false) {
+            return new JsonResponse(['error' => 'comment not found'], 404);
+        }
+
+        return new JsonResponse($comment, 200);
+    }
 
     /**
      * @param ConstraintViolationListInterface $lastErrors
@@ -144,6 +199,7 @@ class TopicController extends AbstractController
             ], 503
         );
     }
+
 
 
 }

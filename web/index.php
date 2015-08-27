@@ -61,10 +61,29 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
 
+/**
+ * API Controllers & routes
+ */
 $app['TopicController'] = $app->share(function() use ($app) {
     return new \Wecamp\TalkBack\Controller\TopicController($app['topicRepository'], $app['topicValidator'], $app['dispatcher']);
 });
 
+// Topic
+$app->post('/api/topics', 'TopicController:newTopic')->bind('api.topic.new');
+$app->get('/api/topics/{id}', 'TopicController:getTopicByIdentifier')->bind('api.topic.get_one');
+$app->get('/api/topics', 'TopicController:getAllTopics')->bind('api.topic.get_all');
+
+// Comment
+$app->post('/api/comments', 'TopicController:newComment')->bind('api.comment.new');
+$app->get('/api/comments/{id}', 'TopicController:getCommentByIdentifier')->bind('api.comment.get_one');
+
+// User
+$app->get('/api/users/{id}/badges', 'UserController:getBadges')->bind('api.user.badges');
+
+
+/**
+ * HTML pages
+ */
 $app->get('/', function() use($app) {
     return $app['twig']->render('homepage.html.twig');
 })->bind('homepage');
@@ -81,6 +100,14 @@ $app->get('/topic/{id}', function($id) use($app) {
     return $app['twig']->render('showtopic.html.twig', ['id' => $id]);
 })->bind('showtopic');
 
+$app->get('/profile/badges', function() use ($app) {
+    /**
+     * @todo - Updated to use user ID of current user
+     */
+    return $app['twig']->render('profile/badges.html.twig', ['user_id' => 1]);
+})->bind('profile.badges');
+
+
 $app->get('/setup', function() use($app) {
     /** @var \Wecamp\TalkBack\LoadFixtures $fixtures */
     $fixtures = $app['fixtures'];
@@ -88,10 +115,6 @@ $app->get('/setup', function() use($app) {
 
     return 'Setup complete!';
 });
-
-$app->post('/api/topics', 'TopicController:newTopic');
-$app->get('/api/topics/{id}', 'TopicController:getTopicByIdentifier');
-$app->get('/api/topics', 'TopicController:getAllTopics');
 
 /** @var \Symfony\Component\EventDispatcher\EventDispatcher $dispatcher */
 $dispatcher = $app['dispatcher'];
