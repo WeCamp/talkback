@@ -134,7 +134,7 @@ var CommentForm = React.createClass({
             <div className="panel-body">
                 <div className="form-horizontal">
                     {this.renderHiddenInput('topic_id', this.props.topicId)}
-                    {this.renderTextarea('comments', 'Your feedback')}
+                    {this.renderTextarea('content', 'Your feedback')}
                 </div>
             </div>
             <div className="panel-footer">
