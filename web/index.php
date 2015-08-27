@@ -70,6 +70,8 @@ $app->get('/setup', function() use($app) {
 });
 
 $app->post('/api/topics', 'TopicController:newTopic');
+$app->post('/api/comments', 'TopicController:newComment');
+$app->get('/api/comments/{id}', 'TopicController:getCommentByIdentifier');
 $app->get('/api/topics/{id}', 'TopicController:getTopicByIdentifier');
 $app->get('/api/topics', 'TopicController:getAllTopics');
 

@@ -114,6 +114,10 @@ final class TopicRepository extends BaseRepository
     }
 
 
+    /**
+     * @param $topicIdentifier
+     * @return array|bool
+     */
     public function getCommentsForTopic($topicIdentifier)
     {
         $connection = $this->getConnection();
@@ -133,6 +137,7 @@ final class TopicRepository extends BaseRepository
     }
 
     
+    {
 
 
 
