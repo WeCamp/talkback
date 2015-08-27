@@ -116,7 +116,16 @@ var CommentList = React.createClass({
 });
 
 var CommentForm = React.createClass({
+
     mixins: [formMethods],
+
+    getInitialState: function() {
+        return {
+            errors: {},
+            submitted: null
+        }
+    },
+
     render: function(){
         return <div className="panel panel-default">
             <div className="panel-heading clearfix">
