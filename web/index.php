@@ -53,9 +53,12 @@ $app['TopicController'] = $app->share(function() use ($app) {
     return new \Wecamp\TalkBack\Controller\TopicController($app, $app['topicRepository']);
 });
 
-$app->post('/api/topics', 'TopicController:newTopic');
-$app->get('/api/topics/{id}', 'TopicController:getTopicByIdentifier');
-$app->get('/api/topics', 'TopicController:getAllTopics');
+// Topic
+$app->post('/api/topics', 'TopicController:newTopic')->bind('api.topic.new');
+$app->get('/api/topics/{id}', 'TopicController:getTopicByIdentifier')->bind('api.topic.get_one');
+$app->get('/api/topics', 'TopicController:getAllTopics')->bind('api.topic.get_all');
+// User
+$app->get('/api/users/{id}/badges', 'UserController:getBadges')->bind('api.user.badges');
 
 
 /**
