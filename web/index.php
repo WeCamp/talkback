@@ -46,8 +46,16 @@ $app['TopicController'] = $app->share(function() use ($app) {
 });
 
 $app->get('/', function() use($app) {
-    return $app['twig']->render('addtopic.html.twig');
+    return $app['twig']->render('homepage.html.twig');
 })->bind('homepage');
+
+$app->get('/topic/{id}', function() use($app) {
+    return $app['twig']->render('showtopic.html.twig');
+})->bind('showtopic');
+
+$app->get('/topic/add', function() use($app) {
+    return $app['twig']->render('addtopic.html.twig');
+})->bind('addtopic');
 
 $app->get('/setup', function() use($app) {
     /** @var \Wecamp\TalkBack\LoadFixtures $fixtures */
