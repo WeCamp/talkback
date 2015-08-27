@@ -55,7 +55,7 @@ var AddTopicForm = React.createClass({
     handleSubmit: function() {
         $.ajax({
             type: 'POST',
-            url: 'URL',
+            url: '/topics',
             data: this.getFormData(),
             success: function(data) {
                 window.location.href = '/';
