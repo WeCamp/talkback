@@ -68,6 +68,10 @@ $app['TopicController'] = $app->share(function() use ($app) {
     return new \Wecamp\TalkBack\Controller\TopicController($app['topicRepository'], $app['topicValidator'], $app['dispatcher']);
 });
 
+$app['UserController'] = $app->share(function() use ($app) {
+    return new \Wecamp\TalkBack\Controller\UserController($app['badgeRepository']);
+});
+
 // Topic
 $app->post('/api/topics', 'TopicController:newTopic')->bind('api.topic.new');
 $app->get('/api/topics/{id}', 'TopicController:getTopicByIdentifier')->bind('api.topic.get_one');
@@ -78,8 +82,7 @@ $app->post('/api/comments', 'TopicController:newComment')->bind('api.comment.new
 $app->get('/api/comments/{id}', 'TopicController:getCommentByIdentifier')->bind('api.comment.get_one');
 
 // User
-$app->get('/api/users/{id}/badges', 'UserController:getBadges')->bind('api.user.badges');
-
+$app->get('/api/users/{id}/badges', 'UserController:getEarnedBadges')->bind('api.user.badges');
 
 /**
  * HTML pages
