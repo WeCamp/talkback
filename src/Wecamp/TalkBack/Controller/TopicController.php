@@ -170,31 +170,6 @@ class TopicController extends AbstractController
         return new JsonResponse($comment, 200);
     }
 
-    /**
-     * @param ConstraintViolationListInterface $lastErrors
-     *
-     * @return JsonResponse
-     */
-    protected function getInvalidDataResponse(ConstraintViolationListInterface $lastErrors)
-    {
-        $errors = [];
-        foreach ($lastErrors as $validationError) {
-            $field            = $validationError->getPropertyPath();
-            $errors[$field][] = $validationError->getMessage();
-        }
-
-        return new JsonResponse(
-            [
-                'errors'            => [
-                    [
-                        'message' => 'Data is invalid',
-                    ],
-                ],
-                'validation_errors' => $errors,
-            ], 503
-        );
-    }
-
     public function addVote(Request $request)
     {
         $data         = $request->request->all();

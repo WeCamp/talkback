@@ -7,6 +7,8 @@
  */
 
 namespace Wecamp\TalkBack\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 /**
  * Class AbstractController
@@ -16,4 +18,28 @@ namespace Wecamp\TalkBack\Controller;
 abstract class AbstractController
 {
 
+    /**
+     * @param ConstraintViolationListInterface $lastErrors
+     *
+     * @return JsonResponse
+     */
+    protected function getInvalidDataResponse(ConstraintViolationListInterface $lastErrors)
+    {
+        $errors = [];
+        foreach ($lastErrors as $validationError) {
+            $field = $validationError->getPropertyPath();
+            $errors[$field][] = $validationError->getMessage();
+        }
+
+        return new JsonResponse(
+            [
+                'errors' => [
+                    [
+                        'message' => 'Data is invalid',
+                    ],
+                ],
+                'validation_errors' => $errors,
+            ], 503
+        );
+    }
 }

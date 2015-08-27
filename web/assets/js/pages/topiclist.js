@@ -5,7 +5,6 @@ var TopicRow = React.createClass({
         return this.props;
     },
     render: function() {
-        console.log(this.state);
         return <tr onClick={this.handleClick}>
             <td>{this.state.topic.creator_name}</td>
             <td>{this.state.topic.title}</td>
