@@ -27,7 +27,8 @@
         "bin-dir": "bin"
     },
     "require": {
-        "silex/silex": "^1.3"
+        "silex/silex": "^1.3",
+        "symfony/validator": "~2.7"
     },
     "require-dev": {
         "codeception/codeception": "^2.1"
