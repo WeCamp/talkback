@@ -81,7 +81,7 @@ $app->post('/api/topics', 'TopicController:newTopic')->bind('api.topic.new');
 $app->get('/api/topics/{id}', 'TopicController:getTopicByIdentifier')->bind('api.topic.get_one');
 $app->get('/api/topics', 'TopicController:getAllTopics')->bind('api.topic.get_all');
 // Topic Comment
-$app->post('/api/topic/{id}/comments', 'TopicController:newComment')->bind('api.comment.new');
+$app->post('/api/topic/{topicId}/comments', 'TopicController:newComment')->bind('api.comment.new');
 $app->get('/api/topic/{topicId}/comments/{commentId}', 'TopicController:getCommentByIdentifier')->bind('api.comment.get_one');
 
 // User
