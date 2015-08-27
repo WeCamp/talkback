@@ -38,18 +38,17 @@ class TopicController extends AbstractController
 
 
     /**
-     * @param TopicRepository $topicRepository
-     * @param TopicValidator $topicValidator
+     * @param TopicRepository  $topicRepository
+     * @param TopicValidator   $topicValidator
      * @param CommentValidator $commentValidator
-     * @param EventDispatcher $dispatcher
+     * @param EventDispatcher  $dispatcher
      */
     public function __construct(
         TopicRepository $topicRepository,
         TopicValidator $topicValidator,
         CommentValidator $commentValidator,
         EventDispatcher $dispatcher
-    )
-    {
+    ) {
         $this->topicRepository  = $topicRepository;
         $this->topicValidator   = $topicValidator;
         $this->commentValidator = $commentValidator;
@@ -108,8 +107,8 @@ class TopicController extends AbstractController
     {
         $topics = $this->topicRepository->getAllTopics();
 
-        if($topics === false) {
-            return new JsonResponse(array('error' => 'No topics found'), 404);
+        if ($topics === false) {
+            return new JsonResponse(['error' => 'No topics found'], 404);
         }
 
         return new JsonResponse($topics, 200);
@@ -161,14 +160,13 @@ class TopicController extends AbstractController
 
         return new JsonResponse(
             [
-                'id'               => $commentID,
-                'topic'            => $newData['topic'],
-                'commenter'        => $newData['commenter'],
-                'content'          => $newData['content'],
-                'created_at'       => $newData['created_at']
+                'id'         => $commentID,
+                'topic'      => $newData['topic'],
+                'commenter'  => $newData['commenter'],
+                'content'    => $newData['content'],
+                'created_at' => $newData['created_at'],
             ], 201
         );
-
     }
 
 
@@ -187,6 +185,7 @@ class TopicController extends AbstractController
 
         return new JsonResponse($comment, 200);
     }
+
 
     /**
      * @param ConstraintViolationListInterface $lastErrors
@@ -212,8 +211,5 @@ class TopicController extends AbstractController
             ], 503
         );
     }
-
-
-
 }
 
