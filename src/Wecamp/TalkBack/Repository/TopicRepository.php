@@ -72,7 +72,7 @@ final class TopicRepository extends BaseRepository
     public function getAllTopics()
     {
         $connection = $this->getConnection();
-        $insert =  "SELECT topic.title, topic.excerpt, topic.owned_by_creator, topic.created_at,
+        $insert =  "SELECT topic.id, topic.title, topic.excerpt, topic.owned_by_creator, topic.created_at,
             user.name as creator_name, count(vote.voter) as vote_count FROM topic LEFT JOIN vote on topic.id = vote.topic
             LEFT JOIN user on user.id = topic.creator GROUP BY topic.id";
         $stmt = $connection->prepare($insert);

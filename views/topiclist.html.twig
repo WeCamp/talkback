@@ -1,0 +1,11 @@
+{% extends "layout.html.twig" %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/jsx" src="/assets/js/pages/topiclist.js"></script>
+{% endblock %}
+
+
+{% block body %}
+    <div id="topiclist"></div>
+{% endblock %}
