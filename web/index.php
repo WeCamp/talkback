@@ -75,6 +75,7 @@ $app['UserController'] = $app->share(function() use ($app) {
 
 // Topic
 $app->post('/api/topics', 'TopicController:newTopic')->bind('api.topic.new');
+$app->get('/api/topics/detailed', 'TopicController:getAllDetailedTopics');
 $app->get('/api/topics/{id}', 'TopicController:getTopicByIdentifier')->bind('api.topic.get_one');
 $app->get('/api/topics', 'TopicController:getAllTopics')->bind('api.topic.get_all');
 $app->post('/api/topics/{id}/vote', 'TopicController:addVote')->bind('api.topic.vote');

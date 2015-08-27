@@ -14,3 +14,11 @@ textarea {
 .list-comments .row:last-child {
     padding-bottom: 0;
 }
+
+.badgeEntry {
+    text-align: center;
+}
+
+.badgeEntry img {
+    width: 100%;
+}
