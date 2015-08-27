@@ -83,14 +83,9 @@ var Comments = React.createClass({
     },
     render: function() {
         return <div>
-            <div className="panel panel-default">
-                <div className="panel-heading clearfix">
-                    <h3 className="panel-title pull-left">Give Feedback</h3>
-                </div>
-                <div className="panel-body">
-                    <CommentForm topicId={this.state.topicId}/>
-                </div>
-            </div>
+
+            <CommentForm topicId={this.state.topicId}/>
+
             <div className="panel panel-default">
                 <div className="panel-heading clearfix">
                     <h3 className="panel-title pull-left">Comments</h3>
@@ -123,7 +118,26 @@ var CommentList = React.createClass({
 var CommentForm = React.createClass({
     mixins: [formMethods],
     render: function(){
-        return <p>Comments form!</p>;
+        return <div className="panel panel-default">
+            <div className="panel-heading clearfix">
+                <h3 className="panel-title pull-left">Give Feedback</h3>
+            </div>
+            <div className="panel-body">
+                <div className="form-horizontal">
+                    {this.renderHiddenInput('topic_id', this.props.topicId)}
+                    {this.renderTextarea('comments', 'Your feedback')}
+                </div>
+            </div>
+            <div className="panel-footer">
+                <div className="row">
+                    <div className="col-md-2">
+                        <button type="button" className="btn btn-primary btn-block" onClick={this.handleSubmit}>
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>;
     }
 });
 
