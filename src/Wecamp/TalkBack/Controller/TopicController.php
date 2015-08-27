@@ -136,9 +136,11 @@ class TopicController extends AbstractController
 
     /**
      * @param Request $request
+     * @param int     $topicId      Topic ID
+     *
      * @return JsonResponse
      */
-    public function newComment(Request $request)
+    public function newComment(Request $request, $topicId)
     {
 
         $data             = $request->request->all();
