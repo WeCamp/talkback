@@ -1,0 +1,11 @@
+{% extends '../layout.html.twig' %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/jsx" src="/assets/js/pages/profile/badges.js"></script>
+{% endblock %}
+
+
+{% block body %}
+    <div id="badges" data-user-id="{{ user_id }}"></div>
+{% endblock %}
