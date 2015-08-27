@@ -7,17 +7,11 @@ var BadgeList = React.createClass({
         };
     },
     componentDidMount: function () {
-        console.log(this.props.source);
-        //$.get(this.props.source, function(result) {
-        //    if (this.isMounted()) {
-        //        this.setState({topics: result});
-        //    }
-        //}.bind(this));
-        this.setState({
-            badges: [
-                {id: 1, name: 'Badge 1', icon: 'Icon 1'}
-            ]
-        });
+        $.get(this.props.source, function(result) {
+            if (this.isMounted()) {
+                this.setState({topics: result});
+            }
+        }.bind(this));
     },
     render           : function () {
         return <ul>
@@ -37,6 +31,6 @@ var BadgeRow = React.createClass({
 
 var target = document.getElementById('my-badges');
 
-var apiSource =target.getAttribute('data-source');
+var apiSource = target.getAttribute('data-source');
 
 React.render(<BadgeList source={apiSource}/>, target);
