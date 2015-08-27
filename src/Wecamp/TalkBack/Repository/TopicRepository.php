@@ -78,7 +78,7 @@ final class TopicRepository extends BaseRepository
 
     }
 
-    public function getTopicWithID($id)
+    public function getTopicWithId($id)
     {
         $connection = $this->getConnection();
         $insert = "SELECT topic.*, count(vote.voter) as vote_count FROM topic LEFT JOIN vote on topic.id = vote.topic
@@ -95,7 +95,4 @@ final class TopicRepository extends BaseRepository
             }
 
     }
-
-
-
 }
