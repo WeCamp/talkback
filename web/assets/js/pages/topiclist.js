@@ -2,7 +2,6 @@
 
 var TopicRow = React.createClass({
     render: function() {
-        console.log(this.props.topic);
         return <tr onClick={this.handleClick}>
             <td>{this.props.topic.creator_name}</td>
             <td>{this.props.topic.title}</td>
@@ -30,7 +29,6 @@ var TopicList = React.createClass({
         }.bind(this));
     },
     render: function() {
-        console.log(this.state);
         return <div className="panel panel-default">
             <div className="panel-heading clearfix">
                 <h3 className="panel-title pull-left">Topics</h3>
