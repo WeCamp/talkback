@@ -69,6 +69,9 @@ final class TopicRepository extends BaseRepository
     }
 
 
+    /**
+     * @return array|bool
+     */
     public function getAllTopics()
     {
         $connection = $this->getConnection();
@@ -97,10 +100,10 @@ final class TopicRepository extends BaseRepository
 
             $insert = "SELECT topic.title, topic.excerpt, topic.details, topic.owned_by_creator, topic.created_at,
             user.name as creator_name, count(vote.voter) as vote_count FROM topic LEFT JOIN vote on topic.id = vote.topic
-            LEFT JOIN user on user.id = topic.creator WHERE topic.id=:id GROUP BY topic.id";
+            LEFT JOIN user on user.id = topic.creator  WHERE topic.id=:id GROUP BY topic.id";
 
-        $stmt = $connection->prepare($insert);
-        $stmt->bindParam(':id', $id);
+            $stmt = $connection->prepare($insert);
+            $stmt->bindParam(':id', $id);
 
             try {
                 $stmt->execute();
@@ -109,8 +112,29 @@ final class TopicRepository extends BaseRepository
                 //todo: log this!
                 return false;
             }
-
     }
+
+
+    public function getCommentsForTopic($topicIdentifier)
+    {
+        $connection = $this->getConnection();
+        $insert = "SELECT comment.id, comment.topic, comment.content, comment.created_at, user.name FROM comment
+        LEFT JOIN user on comment.commenter = user.id WHERE topic=:topicid";
+        $stmt = $connection->prepare($insert);
+
+        $stmt->bindParam(':topicid', $topicIdentifier);
+
+        try {
+            $stmt->execute();
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        }catch(\PDOException $e) {
+            //todo: log this!
+            return false;
+        }
+    }
+
+    
+
 
 
 

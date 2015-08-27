@@ -84,6 +84,7 @@ class TopicController
     public function getTopicByIdentifier($id)
     {
         $topic = $this->topicRepository->getTopicByIdentifier($id);
+        $topic['comments'] = $this->topicRepository->getCommentsForTopic($id);
 
         if($topic === false) {
             return new JsonResponse(array('error' => 'topic not found'), 404);
