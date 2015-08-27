@@ -3,6 +3,7 @@
 require_once __DIR__.'/../vendor/autoload.php';
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Wecamp\TalkBack\Validate\TopicValidator;
 
 $app = new Silex\Application();
@@ -103,6 +104,10 @@ $app->get('/topic/add', function() use($app) {
 $app->get('/topic/{id}', function($id) use($app) {
     return $app['twig']->render('showtopic.html.twig', ['id' => $id]);
 })->bind('showtopic');
+
+$app->get('/profile/change', function() use ($app) {
+    return $app['twig']->render('profile/change.html.twig');
+})->bind('profile.change');
 
 $app->get('/profile/badges', function() use ($app) {
     /**

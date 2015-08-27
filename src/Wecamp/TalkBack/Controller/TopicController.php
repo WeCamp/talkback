@@ -53,7 +53,8 @@ class TopicController extends AbstractController
      */
     public function newTopic(Request $request)
     {
-        $data = $request->request->all();
+        $data   = $request->request->all();
+        $userId = $request->headers->get('X-UserId');
 
         // @todo: This doesn't work with the boolean value currently
 //        if ($this->topicValidator->isNewTopicValid($data) !== true) {
@@ -62,9 +63,7 @@ class TopicController extends AbstractController
 //            return $this->getInvalidDataResponse($lastErrors);
 //        }
 
-        $data['user'] = 1; // Temporary user
-
-        $topicId = $this->topicRepository->createTopic($data);
+        $topicId = $this->topicRepository->createTopic($data, $userId);
 
         if ($topicId === false) {
             return new JsonResponse(['error' => 'Could not create topic.'], 503);
@@ -125,6 +124,7 @@ class TopicController extends AbstractController
     public function newComment(Request $request)
     {
         $data             = $request->request->all();
+        $userId           = $request->headers->get('X-UserId');
         $commentValidator = new CommentValidator($this->app['validator']);
 
         if ($commentValidator->isNewCommentValid($data) !== true) {
@@ -133,7 +133,7 @@ class TopicController extends AbstractController
             return $this->getInvalidDataResponse($lastErrors);
         }
 
-        $commentId = $this->topicRepository->createComment($data);
+        $commentId = $this->topicRepository->createComment($data, $userId);
 
         if ($commentId === false) {
             return new JsonResponse(['error' => 'Could not create comment.'], 503);
@@ -170,12 +170,17 @@ class TopicController extends AbstractController
         return new JsonResponse($comment, 200);
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
     public function addVote(Request $request)
     {
-        $data         = $request->request->all();
-        $data['user'] = 2;
+        $topic  = $request->get('topic');
+        $userId = $request->headers->get('X-UserId');
 
-        $success = $this->topicRepository->addVote($data['topic'], $data['user'], new \DateTime());
+        $success = $this->topicRepository->addVote($topic, $userId, new \DateTime());
 
         if ($success === false) {
             return new JsonResponse(['error' => 'Could not create vote.'], 503);

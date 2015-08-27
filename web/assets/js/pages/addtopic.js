@@ -58,6 +58,10 @@ var AddTopicForm = React.createClass({
             type: 'POST',
             url: '/api/topics',
             data: data,
+            beforeSend: function(xhr) {
+                var userId = reactCookie.load('userId');
+                xhr.setRequestHeader('X-UserId', userId);
+            },
             success: function(data) {
                 window.location.href = '/';
             },

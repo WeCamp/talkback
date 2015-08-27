@@ -37,10 +37,12 @@ final class TopicRepository extends BaseRepository
     }
 
     /**
-     * @param $data
+     * @param array $data
+     * @param int $user
+     *
      * @return bool|string
      */
-    public function createTopic(array $data)
+    public function createTopic(array $data, $user)
     {
         $createdAt = new \DateTime();
         $connection = $this->getConnection();
@@ -53,7 +55,7 @@ final class TopicRepository extends BaseRepository
         $stmt->bindParam(':title', $data['title']);
         $stmt->bindParam(':details', $data['details']);
         $stmt->bindParam(':excerpt', $data['excerpt']);
-        $stmt->bindParam(':creator', $data['user']);
+        $stmt->bindParam(':creator', $user);
         $stmt->bindParam(':ownedByCreator', $data['owned_by_creator']);
         $stmt->bindParam(':createdAt', $format);
 
@@ -131,19 +133,24 @@ final class TopicRepository extends BaseRepository
         }
     }
 
-    public function createComment(array $data)
+    /**
+     * @param array $data
+     * @param int $user
+     *
+     * @return bool|string
+     */
+    public function createComment(array $data, $user)
     {
         $createdAt = new \DateTime();
         $connection = $this->getConnection();
         $format = $createdAt->format('Y-m-d H:i:s');
-        $tempUser = 2;
 
         $insert = "INSERT INTO comment (topic, commenter, content, created_at)
                 VALUES (:topic, :commenter, :content, :created_at)";
         $stmt = $connection->prepare($insert);
 
         $stmt->bindParam(':topic', $data['topic']);
-        $stmt->bindParam(':commenter', $tempUser);
+        $stmt->bindParam(':commenter', $user);
         $stmt->bindParam(':content', $data['content']);
         $stmt->bindParam(':created_at', $format);
 

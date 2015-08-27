@@ -38,6 +38,10 @@ var ShowTopic = React.createClass({
             type: 'POST',
             url: url,
             data: data,
+            beforeSend: function(xhr) {
+                var userId = reactCookie.load('userId');
+                xhr.setRequestHeader('X-UserId', userId);
+            },
             success: function(data) {
                 var topic = self.state.topic;
                 topic.vote_count = parseInt(topic.vote_count) + 1;
