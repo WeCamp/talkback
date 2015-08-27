@@ -46,10 +46,21 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
 
+/**
+ * API Controllers & routes
+ */
 $app['TopicController'] = $app->share(function() use ($app) {
     return new \Wecamp\TalkBack\Controller\TopicController($app, $app['topicRepository']);
 });
 
+$app->post('/api/topics', 'TopicController:newTopic');
+$app->get('/api/topics/{id}', 'TopicController:getTopicByIdentifier');
+$app->get('/api/topics', 'TopicController:getAllTopics');
+
+
+/**
+ * HTML pages
+ */
 $app->get('/', function() use($app) {
     return $app['twig']->render('homepage.html.twig');
 })->bind('homepage');
@@ -73,9 +84,5 @@ $app->get('/setup', function() use($app) {
 
     return 'Setup complete!';
 });
-
-$app->post('/api/topics', 'TopicController:newTopic');
-$app->get('/api/topics/{id}', 'TopicController:getTopicByIdentifier');
-$app->get('/api/topics', 'TopicController:getAllTopics');
 
 $app->run();
