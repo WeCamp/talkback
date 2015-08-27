@@ -37,9 +37,14 @@ $app['fixtures'] = $app->share(function() use ($app) {
     );
 });
 
+/**
+ * Twig bits
+ */
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__.'/../views',
 ));
+$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
+
 
 $app['TopicController'] = $app->share(function() use ($app) {
     return new \Wecamp\TalkBack\Controller\TopicController($app, $app['topicRepository']);
