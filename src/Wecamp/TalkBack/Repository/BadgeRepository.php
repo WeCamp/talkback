@@ -34,6 +34,57 @@ class BadgeRepository extends BaseRepository
     }
 
     /**
+     * @param string $name
+     * @param int $user
+     * @param \DateTime $createdAt
+     */
+    public function addEvent($name, $user, \DateTime $createdAt)
+    {
+        $connection = $this->getConnection();
+
+        $createdAt = $createdAt->format('Y-m-d H:i:s');
+
+        $insert = "INSERT INTO event (name, user, created_at)
+                VALUES (:name, :user, :createdAt)";
+        $stmt = $connection->prepare($insert);
+
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':user', $user);
+        $stmt->bindParam(':createdAt', $createdAt);
+
+        try {
+            $stmt->execute();
+        }catch(\PDOException $e) {
+            //todo: log this!
+            var_dump($e);
+        }
+    }
+
+    /**
+     * @param int $user
+     * @param string $eventName
+     *
+     * @return array
+     */
+    public function findEventsByUserAndEventName($user, $eventName)
+    {
+        $connection = $this->getConnection();
+        $insert =  "SELECT * FROM event WHERE user = :user AND name = :name";
+        $stmt = $connection->prepare($insert);
+
+        $stmt->bindParam(':user', $user);
+        $stmt->bindParam(':name', $eventName);
+
+        try{
+            $stmt->execute();
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        }catch(\PDOException $e){
+            //todo: log this!
+            return [];
+        }
+    }
+
+    /**
      * Let a user earn a badge.
      *
      * @param int $userIdentifier
