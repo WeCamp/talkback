@@ -8,7 +8,7 @@ var ShowTopic = React.createClass({
                 title: '',
                 details: '',
                 excerpt: '',
-                creator: '',
+                creator_name: '',
                 vote_count: 0,
                 created_at: ''
             }
@@ -30,7 +30,7 @@ var ShowTopic = React.createClass({
                 <h3 className="panel-title pull-left">{this.state.topic.title}</h3>
             </div>
             <div className="panel-body">
-                <div>This topic was added by {this.state.topic.creator} at {this.state.topic.created_at}</div>
+                <div>This topic was added by {this.state.topic.creator_name} at {this.state.topic.created_at}</div>
                 <div>{this.state.topic.details}</div>
                 <div>{this.state.topic.excerpt}</div>
                 <div>Votes: {this.state.topic.vote_count}</div>
