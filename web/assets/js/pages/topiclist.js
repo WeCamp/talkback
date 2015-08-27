@@ -17,11 +17,13 @@ var TopicRow = React.createClass({
 });
 
 var TopicList = React.createClass({
+
     getInitialState: function() {
         return {
             topics: []
         };
     },
+
     componentDidMount: function() {
         $.get(this.props.source, function(result) {
             if (this.isMounted()) {
@@ -29,6 +31,7 @@ var TopicList = React.createClass({
             }
         }.bind(this));
     },
+
     render: function() {
         console.log(this.state);
         return <div className="panel panel-default">

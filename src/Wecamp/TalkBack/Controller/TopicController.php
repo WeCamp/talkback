@@ -7,7 +7,6 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Wecamp\TalkBack\Event\TopicAddedEvent;
 use Wecamp\TalkBack\Repository\TopicRepository;
 use Wecamp\TalkBack\Validate\CommentValidator;
@@ -15,34 +14,6 @@ use Wecamp\TalkBack\Validate\TopicValidator;
 
 class TopicController extends AbstractController
 {
-
-    /**
-     * @var TopicRepository
-     */
-    private $topicRepository;
-
-    /**
-     * @var TopicValidator
-     */
-    private $topicValidator;
-
-    /**
-     * @var EventDispatcher
-     */
-    private $dispatcher;
-
-    /**
-     * @param TopicRepository $topicRepository
-     * @param TopicValidator $topicValidator
-     * @param EventDispatcher $dispatcher
-     */
-    public function __construct(TopicRepository $topicRepository, TopicValidator $topicValidator, EventDispatcher $dispatcher)
-    {
-        $this->topicRepository  = $topicRepository;
-        $this->topicValidator   = $topicValidator;
-        $this->dispatcher = $dispatcher;
-    }
-
 
     /**
      * Creates a new topic
@@ -57,7 +28,8 @@ class TopicController extends AbstractController
         $data = $request->request->all();
 
         // @todo: This doesn't work with the boolean value currently
-//        if ($this->topicValidator->isNewTopicValid($data) !== true) {
+//        $topicValidator = $this->getTopicValidator();
+//        if ($topicValidator->isNewTopicValid($data) !== true) {
 //            $lastErrors = $this->topicValidator->getLastErrors();
 //
 //            return $this->getInvalidDataResponse($lastErrors);
@@ -65,15 +37,15 @@ class TopicController extends AbstractController
 
         $data['user'] = 1; // Temporary user
 
-        $topicId = $this->topicRepository->createTopic($data);
+        $topicId = $this->getTopicRepository()->createTopic($data);
 
         if ($topicId === false) {
             return new JsonResponse(['error' => 'Could not create topic.'], 503);
         }
 
-        $newData = $this->topicRepository->getTopicByIdentifier($topicId);
+        $newData = $this->getTopicRepository()->getTopicByIdentifier($topicId);
 
-        $this->dispatcher->dispatch('topic.add', new TopicAddedEvent($data['user']));
+        $this->getDispatcher()->dispatch('topic.add', new TopicAddedEvent($data['user']));
 
         return new JsonResponse(
             [
@@ -93,10 +65,10 @@ class TopicController extends AbstractController
      */
     public function getAllTopics()
     {
-        $topics = $this->topicRepository->getAllTopics();
+        $topics = $this->getTopicRepository()->getAllTopics();
 
-        if($topics === false) {
-            return new JsonResponse(array('error' => 'No topics found'), 404);
+        if ($topics === false) {
+            return new JsonResponse(['error' => 'No topics found'], 404);
         }
 
         return new JsonResponse($topics, 200);
@@ -110,13 +82,13 @@ class TopicController extends AbstractController
      */
     public function getTopicByIdentifier($id)
     {
-        $topic = $this->topicRepository->getTopicByIdentifier($id);
+        $topic = $this->getTopicRepository()->getTopicByIdentifier($id);
 
         if ($topic === false) {
             return new JsonResponse(['error' => 'topic not found'], 404);
         }
 
-        $topic['comments'] = $this->topicRepository->getCommentsForTopic($id);
+        $topic['comments'] = $this->getTopicRepository()->getCommentsForTopic($id);
 
         return new JsonResponse($topic, 200);
     }
@@ -124,38 +96,51 @@ class TopicController extends AbstractController
 
     /**
      * @param Request $request
+     * @param int     $topicId Topic ID
+     *
      * @return JsonResponse
      */
-    public function newComment(Request $request)
+    public function newComment(Request $request, $topicId)
     {
+        $topic = $this->getTopicRepository()->getTopicByIdentifier($topicId);
 
-        $data             = $request->request->all();
-        $commentValidator = new CommentValidator($this->app['validator']);
+        if (empty($topic)) {
+            return new JsonResponse(
+                [
+                    'errors' => [
+                        ['message' => 'Topic not found'],
+                    ],
+                ], 404
+            );
+        }
 
+        $data          = $request->request->all();
+        $data['topic'] = (int)$topicId;
+
+        $commentValidator = $this->getCommentValidator();
         if ($commentValidator->isNewCommentValid($data) !== true) {
             $lastErrors = $commentValidator->getLastErrors();
 
             return $this->getInvalidDataResponse($lastErrors);
         }
 
-        $commentID = $this->topicRepository->createComment($data);
+        $commentID = $this->getTopicRepository()->createComment($data);
 
         if ($commentID === false) {
-            return new JsonResponse(['error' => 'Could not create comment.'], 503);
+            return new JsonResponse(['error' => 'Could not create comment.'], 400);
         }
 
-        $newData = $this->topicRepository->getCommentByIdentifier($commentID);
+        $newData = $this->getTopicRepository()->getCommentByIdentifier($commentID);
 
         return new JsonResponse(
             [
-                'id'               => $commentID,
-                'topic'            => $newData['topic'],
-                'commenter'        => $newData['commenter'],
-                'content'          => $newData['content'],
-                'created_at'       => $newData['created_at']
+                'id'         => (int)$commentID,
+                'topic'      => (int)$newData['topic'],
+                'commenter'  => $newData['commenter'],
+                'content'    => $newData['content'],
+                'created_at' => $newData['created_at'],
             ], 201
         );
-
     }
 
 
@@ -166,7 +151,7 @@ class TopicController extends AbstractController
      */
     public function getCommentByIdentifier($id)
     {
-        $comment = $this->topicRepository->getCommentByIdentifier($id);
+        $comment = $this->getTopicRepository()->getCommentByIdentifier($id);
 
         if ($comment === false) {
             return new JsonResponse(['error' => 'comment not found'], 404);
@@ -175,32 +160,40 @@ class TopicController extends AbstractController
         return new JsonResponse($comment, 200);
     }
 
-    /**
-     * @param ConstraintViolationListInterface $lastErrors
-     *
-     * @return JsonResponse
-     */
-    protected function getInvalidDataResponse(ConstraintViolationListInterface $lastErrors)
-    {
-        $errors = [];
-        foreach ($lastErrors as $validationError) {
-            $field            = $validationError->getPropertyPath();
-            $errors[$field][] = $validationError->getMessage();
-        }
 
-        return new JsonResponse(
-            [
-                'errors'            => [
-                    [
-                        'message' => 'Data is invalid',
-                    ],
-                ],
-                'validation_errors' => $errors,
-            ], 503
-        );
+    /**
+     * @return TopicRepository
+     */
+    protected function getTopicRepository()
+    {
+        return $this->app['topicRepository'];
     }
 
 
+    /**
+     * @return EventDispatcher
+     */
+    protected function getDispatcher()
+    {
+        return $this->app['dispatcher'];
+    }
 
+
+    /**
+     * @return TopicValidator
+     */
+    protected function getTopicValidator()
+    {
+        return $this->app['topicValidator'];
+    }
+
+
+    /**
+     * @return CommentValidator
+     */
+    protected function getCommentValidator()
+    {
+        return $this->app['commentValidator'];
+    }
 }
 

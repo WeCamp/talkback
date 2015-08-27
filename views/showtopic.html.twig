@@ -2,10 +2,14 @@
 
 {% block javascript %}
     {{ parent() }}
+    <script type="text/jsx" src="/assets/js/modules/methods.js"></script>
     <script type="text/jsx" src="/assets/js/pages/showtopic.js"></script>
+    <script>
+        var comment_new_url = '{{ app.url_generator.generate('api.comment.new', {topicId: id }) }}';
+    </script>
 {% endblock %}
 
 
 {% block body %}
-    <div id="showtopic" data-topicid="{{ id }}"></div>
+    <div id="showtopic" data-topicid="{{ id }}" style="margin-top: 20px;"></div>
 {% endblock %}

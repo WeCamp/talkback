@@ -3,6 +3,7 @@
 require_once __DIR__.'/../vendor/autoload.php';
 
 use Symfony\Component\HttpFoundation\Request;
+use Wecamp\TalkBack\Validate\CommentValidator;
 use Wecamp\TalkBack\Validate\TopicValidator;
 
 $app = new Silex\Application();
@@ -30,6 +31,10 @@ $app['badgeRepository'] = $app->share(function() use ($app) {
     return new \Wecamp\TalkBack\Repository\BadgeRepository();
 });
 
+$app['propertyAccessor'] = $app->share(function() use ($app) {
+    return new \Symfony\Component\PropertyAccess\PropertyAccessor();
+});
+
 $app['fixtures'] = $app->share(function() use ($app) {
     return new \Wecamp\TalkBack\LoadFixtures(
         $app['userRepository'],
@@ -41,6 +46,9 @@ $app['fixtures'] = $app->share(function() use ($app) {
 // Validators
 $app['topicValidator'] = function() use ($app) {
     return new TopicValidator($app['validator']);
+};
+$app['commentValidator'] = function() use ($app) {
+    return new CommentValidator($app['validator']);
 };
 
 // Badges
@@ -65,17 +73,16 @@ $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
  * API Controllers & routes
  */
 $app['TopicController'] = $app->share(function() use ($app) {
-    return new \Wecamp\TalkBack\Controller\TopicController($app['topicRepository'], $app['topicValidator'], $app['dispatcher']);
+    return new \Wecamp\TalkBack\Controller\TopicController($app);;
 });
 
 // Topic
 $app->post('/api/topics', 'TopicController:newTopic')->bind('api.topic.new');
 $app->get('/api/topics/{id}', 'TopicController:getTopicByIdentifier')->bind('api.topic.get_one');
 $app->get('/api/topics', 'TopicController:getAllTopics')->bind('api.topic.get_all');
-
-// Comment
-$app->post('/api/comments', 'TopicController:newComment')->bind('api.comment.new');
-$app->get('/api/comments/{id}', 'TopicController:getCommentByIdentifier')->bind('api.comment.get_one');
+// Topic Comment
+$app->post('/api/topic/{topicId}/comments', 'TopicController:newComment')->bind('api.comment.new');
+$app->get('/api/topic/{topicId}/comments/{commentId}', 'TopicController:getCommentByIdentifier')->bind('api.comment.get_one');
 
 // User
 $app->get('/api/users/{id}/badges', 'UserController:getBadges')->bind('api.user.badges');
