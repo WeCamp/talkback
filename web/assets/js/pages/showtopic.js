@@ -25,17 +25,35 @@ var ShowTopic = React.createClass({
         }.bind(this));
     },
     render: function() {
-        return <div className="panel panel-default">
-            <div className="panel-heading clearfix">
-                <h3 className="panel-title pull-left">{this.state.topic.title}</h3>
+        return <div>
+            <div className="panel panel-default">
+                <div className="panel-heading clearfix">
+                    <h3 className="panel-title pull-left">{this.state.topic.title}</h3>
+                </div>
+                <div className="panel-body">
+                    <table className="table table-striped table-topics">
+                        <tr>
+                            <td>Created by</td>
+                            <td>{this.state.topic.creator_name}</td>
+                        </tr>
+                        <tr>
+                            <td>Created at</td>
+                            <td>{this.state.topic.created_at}</td>
+                        </tr>
+                        <tr>
+                            <td>Upvotes</td>
+                            <td>{this.state.topic.vote_count}</td>
+                        </tr>
+                    </table>
+                    <h4>My great idea is about:</h4>
+                    <div className="row">
+                        <div className="col-md-12">
+                            {this.state.topic.details}
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div className="panel-body">
-                <div>This topic was added by {this.state.topic.creator_name} at {this.state.topic.created_at}</div>
-                <div>{this.state.topic.details}</div>
-                <div>{this.state.topic.excerpt}</div>
-                <div>Votes: {this.state.topic.vote_count}</div>
-            </div>
-            <Comments />
+            <Comments source="/api/topics/"/>
         </div>
     }
 });
@@ -45,22 +63,22 @@ var Comments = React.createClass({
     getInitialState: function(){
         return {
             data: {
-                comments: [
-                    {
-                        'username': 'Bob',
-                        'content': 'This sucks!'
-                    },
-                    {
-                        'username': 'Shaniqua',
-                        'content': 'Duuussss'
-                    },
-                    {
-                        'username': 'Adri',
-                        'content': 'WOW!'
-                    },
-                ]
+                comments: []
             }
         };
+    },
+    componentDidMount: function() {
+        var topicId = document.getElementById('showtopic').getAttribute('data-topicid');
+
+        $.get(this.props.source + topicId, function(result) {
+            if (this.isMounted()) {
+                this.setState({data:
+                    {
+                        comments: result.comments
+                    }
+                });
+            }
+        }.bind(this));
     },
     render: function() {
         return <div>
@@ -69,7 +87,7 @@ var Comments = React.createClass({
                     <h3 className="panel-title pull-left">Comments</h3>
                 </div>
                 <div className="panel-body">
-                    <CommentList data={this.state.data}/>
+                    <CommentList comments={this.state.data.comments}/>
                 </div>
             </div>
         </div>
@@ -78,27 +96,23 @@ var Comments = React.createClass({
 
 var CommentList = React.createClass({
     render: function() {
-        return <table className="table table-striped">
-            <thead>
-                <tr>
-                    <th width="25%">User</th>
-                    <th>Content</th>
-                </tr>
-            </thead>
+        return <div className="list-comments">
             {
-                this.props.data.comments.map(function(comment) {
-                    return <tr>
-                        <td>{comment.username}</td>
-                        <td>{comment.content}</td>
-                    </tr>
+                this.props.comments.map(function(comment) {
+                    return <div className="row">
+                        <div className="col-md-12">
+                            <strong>{comment.name}:</strong><br />
+                            {comment.content}
+                        </div>
+                    </div>
                 })
             }
-        </table>
+        </div>
     },
 });
 
 var showTopic = document.getElementById('showtopic');
 React.render(
-    <ShowTopic source="/api/topics/"  />,
+    <ShowTopic source="/api/topics/" />,
     showTopic
 );
