@@ -105,7 +105,6 @@ var Comments = React.createClass({
 var CommentList = React.createClass({
 
     getInitialState: function(){
-        console.log(this.props.comments);
         return {
             data: {
                 comments: []
