@@ -156,11 +156,26 @@ var CommentForm = React.createClass({
     },
 
     handleSubmit: function() {
-        alert('Yay!');
+
+        var data = this.getFormData();
+
+        $.ajax({
+            type: 'POST',
+            url: comment_new_url,
+            data: data,
+            success: function(data) {
+                alert('Done!');
+                //window.location.href = '/';
+            },
+            error: function(jqXHR, status, error) {
+                console.log(status, jqXHR.responseJSON, error);
+            }.bind(this)
+        });
     }
 });
 
 var showTopic = document.getElementById('showtopic');
+
 React.render(
     <ShowTopic source="/api/topics/" />,
     showTopic
