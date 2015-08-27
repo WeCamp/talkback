@@ -103,10 +103,27 @@ var Comments = React.createClass({
 });
 
 var CommentList = React.createClass({
+
+    getInitialState: function(){
+        console.log(this.props.comments);
+        return {
+            data: {
+                comments: []
+            }
+        };
+    },
+
+    componentWillReceiveProps: function(nextProps) {
+        var state = this.state;
+
+        state.data.comments = nextProps.comments;
+        this.setState(state);
+    },
+
     render: function() {
         return <div className="list-comments">
             {
-                this.props.comments.map(function(comment) {
+                this.state.data.comments.map(function(comment) {
                     return <div className="row">
                         <div className="col-md-12">
                             <strong>{comment.name}:</strong><br />
