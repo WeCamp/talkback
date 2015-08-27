@@ -1,9 +1,14 @@
 {% extends "layout.html.twig" %}
 
 {% block body %}
-    <h1>Homepage</h1>
+    <section id="header">
+        <header>
+            <h1>TalkBack</h1>
+            <p>A place for giving back talks.</p>
+        </header>
+        <footer>
+            <a href="{{ app.url_generator.generate('topiclist') }}" class="button style2 scrolly-middle">Start browsing topics</a>
+        </footer>
+    </section>
 
-    <ul>
-        <li><a href="{{ app.url_generator.generate('topiclist') }}">Topics</a></li>
-    </ul>
 {% endblock %}
