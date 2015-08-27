@@ -70,10 +70,11 @@ var Comments = React.createClass({
     componentDidMount: function() {
         var topicId = document.getElementById('showtopic').getAttribute('data-topicid');
 
-        $.get(this.props.source + topicId, function(result) {
+        $.get(this.props.source + topicId, function (result) {
             if (this.isMounted()) {
-                this.setState({data:
-                    {
+                this.setState({
+                    data: {
+                        topicId : topicId,
                         comments: result.comments
                     }
                 });
@@ -87,7 +88,7 @@ var Comments = React.createClass({
                     <h3 className="panel-title pull-left">Give Feedback</h3>
                 </div>
                 <div className="panel-body">
-                    <CommentForm/>
+                    <CommentForm topicId={this.state.topicId}/>
                 </div>
             </div>
             <div className="panel panel-default">
