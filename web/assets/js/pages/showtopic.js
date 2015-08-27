@@ -144,8 +144,8 @@ var CommentList = React.createClass({
     render: function() {
         return <div className="list-comments">
             {
-                this.state.data.comments.map(function(comment) {
-                    return <div className="row">
+                this.state.data.comments.map(function(comment, i) {
+                    return <div className="row" key={comment.id}>
                         <div className="col-md-12">
                             <strong>{comment.name}:</strong><br />
                             {comment.content}
