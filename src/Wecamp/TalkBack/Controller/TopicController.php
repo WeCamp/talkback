@@ -118,9 +118,9 @@ class TopicController extends AbstractController
                 'errors'            => [
                     [
                         'message' => 'Data is invalid',
-                    ]
+                    ],
                 ],
-                'validation_errors' => $errors
+                'validation_errors' => $errors,
             ], 503
         );
     }
