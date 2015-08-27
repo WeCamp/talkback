@@ -71,10 +71,27 @@ final class TopicRepository extends BaseRepository
     public function getTopics()
     {
 
+        $connection = $this->getConnection();
+        $insert = "";
+        $stmt = $connection->prepare($insert);
+
     }
 
     public function getTopicWithID($id)
     {
+        $connection = $this->getConnection();
+        $insert = "SELECT topic.*, count(vote.voter) as vote_count FROM topic LEFT JOIN vote on topic.id = vote.topic
+        WHERE id=:id ";
+        $stmt = $connection->prepare($insert);
+        $stmt->bindParam(':id', $id);
+
+            try {
+                $stmt->execute();
+                return $stmt->fetch(\PDO::FETCH_ASSOC);
+            }catch(\PDOException $e) {
+                //todo: log this!
+                return false;
+            }
 
     }
 
