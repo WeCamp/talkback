@@ -5,7 +5,7 @@
     <script type="text/jsx" src="/assets/js/modules/methods.js"></script>
     <script type="text/jsx" src="/assets/js/pages/showtopic.js"></script>
     <script>
-        var comment_new_url = '{{ app.url_generator.generate('api.comment.new', {id: id }) }}';
+        var comment_new_url = '{{ app.url_generator.generate('api.comment.new', {topicId: id }) }}';
     </script>
 {% endblock %}
 
