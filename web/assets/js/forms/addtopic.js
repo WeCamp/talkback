@@ -45,20 +45,24 @@ var AddTopicForm = React.createClass({
     },
     getFormData: function() {
         var data = {
-            name: this.refs.name.getDOMNode().value,
+            title: this.refs.name.getDOMNode().value,
             excerpt: this.refs.excerpt.getDOMNode().value,
             details: this.refs.details.getDOMNode().value,
-            owned_by_user: this.refs.owned_by_userYes.getDOMNode().checked
+            owned_by_creator: this.refs.owned_by_userYes.getDOMNode().checked
         }
         return data
     },
     handleSubmit: function() {
+        var data = this.getFormData();
         $.ajax({
             type: 'POST',
-            url: '/topics',
-            data: this.getFormData(),
+            url: '/api/topics',
+            data: data,
             success: function(data) {
                 window.location.href = '/';
+            },
+            error: function(jqXHR, status, error) {
+                console.log(status, jqXHR.responseJSON);
             }.bind(this)
         });
     },
