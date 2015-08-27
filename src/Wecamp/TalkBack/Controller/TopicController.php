@@ -134,8 +134,8 @@ class TopicController extends AbstractController
 
         return new JsonResponse(
             [
-                'id'         => $commentID,
-                'topic'      => $newData['topic'],
+                'id'         => (int)$commentID,
+                'topic'      => (int)$newData['topic'],
                 'commenter'  => $newData['commenter'],
                 'content'    => $newData['content'],
                 'created_at' => $newData['created_at'],
