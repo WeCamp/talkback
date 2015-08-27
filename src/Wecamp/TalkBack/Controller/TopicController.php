@@ -44,7 +44,7 @@ class TopicController extends AbstractController
      */
     public function newTopic(Request $request)
     {
-        $data          = $request->request->all();
+        $data           = $request->request->all();
         $topicValidator = new TopicValidator($this->app['validator']);
 
         if ($topicValidator->isNewTopicValid($data) !== true) {
@@ -59,16 +59,20 @@ class TopicController extends AbstractController
             return new JsonResponse(['error' => 'Could not create topic.'], 503);
         }
 
+        $newData = $this->topicRepository->getTopicByIdentifier($topicID);
+
         return new JsonResponse(
             [
                 'id'               => $topicID,
-                'title'            => $data['title'],
-                'details'          => $data['details'],
-                'excerpt'          => $data['excerpt'],
-                'owned_by_creator' => $data['owned_by_creator'],
+                'title'            => $newData['title'],
+                'details'          => $newData['details'],
+                'excerpt'          => $newData['excerpt'],
+                'owned_by_creator' => $newData['owned_by_creator'],
+                'created_at'       => $newData['created_at'],
             ], 201
         );
     }
+
 
     /**
      * @return JsonResponse
@@ -78,16 +82,18 @@ class TopicController extends AbstractController
         return new JsonResponse($this->topicRepository->getTopics());
     }
 
+
     /**
      * @param $id
+     *
      * @return JsonResponse
      */
     public function getTopic($id)
     {
         $topic = $this->topicRepository->getTopicByIdentifier($id);
 
-        if($topic === false) {
-            return new JsonResponse(array('error' => 'topic not found'), 404);
+        if ($topic === false) {
+            return new JsonResponse(['error' => 'topic not found'], 404);
         }
 
         return new JsonResponse($topic, 200);
