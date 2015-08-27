@@ -58,6 +58,7 @@ $app->get('/setup', function() use($app) {
 });
 
 $app->post('/api/topics', 'TopicController:newTopic');
-$app->get('/api/topics/{id}', 'TopicController:getTopic');
+$app->get('/api/topics/{id}', 'TopicController:getTopicByIdentifier');
+$app->get('/api/topics', 'TopicController:getAllTopics');
 
 $app->run();

@@ -66,16 +66,22 @@ class TopicController
     /**
      * @return JsonResponse
      */
-    public function getTopics()
+    public function getAllTopics()
     {
-        return new JsonResponse($this->topicRepository->getTopics());
+        $topics = $this->topicRepository->getAllTopics();
+
+        if($topics === false) {
+            return new JsonResponse(array('error' => 'No topics found'), 404);
+        }
+
+        return new JsonResponse($topics, 200);
     }
 
     /**
      * @param $id
      * @return JsonResponse
      */
-    public function getTopic($id)
+    public function getTopicByIdentifier($id)
     {
         $topic = $this->topicRepository->getTopicByIdentifier($id);
 
