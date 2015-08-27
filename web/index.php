@@ -78,7 +78,10 @@ $app->get('/topic/add', function() use($app) {
 })->bind('addtopic');
 
 $app->get('/profile/badges', function() use ($app) {
-    return $app['twig']->render('profile/badges.html.twig');
+    /**
+     * @todo - Updated to use user ID of current user
+     */
+    return $app['twig']->render('profile/badges.html.twig', ['user_id' => 1]);
 })->bind('profile.badges');
 
 
