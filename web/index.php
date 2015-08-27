@@ -69,12 +69,7 @@ $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
  * API Controllers & routes
  */
 $app['TopicController'] = $app->share(function() use ($app) {
-    return new \Wecamp\TalkBack\Controller\TopicController(
-        $app['topicRepository'],
-        $app['topicValidator'],
-        $app['commentValidator'],
-        $app['dispatcher']
-    );
+    return new \Wecamp\TalkBack\Controller\TopicController($app);;
 });
 
 // Topic
