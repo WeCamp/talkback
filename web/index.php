@@ -49,8 +49,8 @@ $app->get('/', function() use($app) {
     return $app['twig']->render('homepage.html.twig');
 })->bind('homepage');
 
-$app->get('/topic/{id}', function() use($app) {
-    return $app['twig']->render('showtopic.html.twig');
+$app->get('/topic/{id}', function($id) use($app) {
+    return $app['twig']->render('showtopic.html.twig', ['id' => $id]);
 })->bind('showtopic');
 
 $app->get('/topic/add', function() use($app) {
