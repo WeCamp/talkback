@@ -31,6 +31,10 @@ $app['badgeRepository'] = $app->share(function() use ($app) {
     return new \Wecamp\TalkBack\Repository\BadgeRepository();
 });
 
+$app['propertyAccessor'] = $app->share(function() use ($app) {
+    return new \Symfony\Component\PropertyAccess\PropertyAccessor();
+});
+
 $app['fixtures'] = $app->share(function() use ($app) {
     return new \Wecamp\TalkBack\LoadFixtures(
         $app['userRepository'],
