@@ -114,8 +114,8 @@ class TopicController extends AbstractController
             );
         }
 
-        $data             = $request->request->all();
-        $data['topic_id'] = $topicId;
+        $data          = $request->request->all();
+        $data['topic'] = $topicId;
 
         $commentValidator = $this->getCommentValidator();
         if ($commentValidator->isNewCommentValid($data) !== true) {
