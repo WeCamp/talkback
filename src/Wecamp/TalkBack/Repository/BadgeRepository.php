@@ -2,6 +2,8 @@
 
 namespace Wecamp\TalkBack\Repository;
 
+use Symfony\Component\Validator\Constraints\DateTime;
+
 class BadgeRepository extends BaseRepository
 {
     /**
@@ -21,6 +23,7 @@ class BadgeRepository extends BaseRepository
         $connection->exec("CREATE TABLE IF NOT EXISTS earned_badge (
                     user INTEGER,
                     badge INTEGER,
+                    created_at TEXT,
                     PRIMARY KEY (user, badge))");
 
         $connection->exec("CREATE TABLE IF NOT EXISTS event (
@@ -28,5 +31,36 @@ class BadgeRepository extends BaseRepository
                     name TEXT,
                     user INTEGER,
                     created_at TEXT)");
+    }
+
+    /**
+     * Let a user earn a badge.
+     *
+     * @param int $userIdentifier
+     * @param int $badge
+     * @param \DateTime $createdAt
+     *
+     * @return void
+     */
+    public function earnBadge($userIdentifier, $badge, \DateTime $createdAt)
+    {
+        $connection = $this->getConnection();
+
+        $createdAt = $createdAt->format('Y-m-d H:i:s');
+
+        $insert = "INSERT INTO earned_badge (user, badge, created_at)
+                VALUES (:user, :badge, :createdAt)";
+        $stmt = $connection->prepare($insert);
+
+        $stmt->bindParam(':user', $userIdentifier);
+        $stmt->bindParam(':badge', $badge);
+        $stmt->bindParam(':createdAt', $createdAt);
+
+        try {
+            $stmt->execute();
+        }catch(\PDOException $e) {
+            //todo: log this!
+            var_dump($e);
+        }
     }
 }

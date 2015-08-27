@@ -57,7 +57,8 @@ final class TopicRepository extends BaseRepository
         $stmt->bindParam(':excerpt', $data['excerpt']);
         $stmt->bindParam(':creator', $tempUser);
         $stmt->bindParam(':ownedByCreator', $data['owned_by_creator']);
-        $stmt->bindParam('createdAt', $format);
+        $stmt->bindParam(':createdAt', $format);
+
         try {
             $stmt->execute();
             return $connection->lastInsertId();
