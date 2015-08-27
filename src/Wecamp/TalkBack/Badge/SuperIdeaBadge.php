@@ -6,6 +6,12 @@ use Wecamp\TalkBack\Event\TopicAddedEvent;
 
 class SuperIdeaBadge implements Badge
 {
+    private $repository;
+
+    public function __construct(BadgeRepository $repository)
+    {
+        $this->repository = $repository;
+    }
 
     /**
      * Returns an array of event names this subscriber wants to listen to.
@@ -39,6 +45,11 @@ class SuperIdeaBadge implements Badge
      */
     public function calculate($event)
     {
-        var_dump('super idea!'); die;
+        echo '<pre>';
+        var_dump($this->repository->findEventsByUserAndEventName($event->getUser(), '1'));
+        die('</pre>');
+        if (count($this->repository->findEventsByUserAndEventName($event->getUser(), '1')) > 0) {
+
+        }
     }
 }

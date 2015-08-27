@@ -1,3 +1,16 @@
 textarea {
     max-width: 100% !important;
 }
+.table-topics tr td:first-child {
+    width: 25%;
+    font-weight: bold;
+}
+.list-comments .strong {
+    padding-bottom: 5px;
+}
+.list-comments .row {
+    padding-bottom: 20px;
+}
+.list-comments .row:last-child {
+    padding-bottom: 0;
+}

@@ -62,7 +62,7 @@ var AddTopicForm = React.createClass({
                 window.location.href = '/';
             },
             error: function(jqXHR, status, error) {
-                console.log(status, jqXHR.responseJSON);
+                console.log(status, jqXHR.responseJSON, error);
             }.bind(this)
         });
     },
