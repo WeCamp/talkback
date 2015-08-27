@@ -32,21 +32,21 @@ var ShowTopic = React.createClass({
                 <div className="panel-heading clearfix">
                     <h3 className="panel-title pull-left">{this.state.topic.title}</h3>
                 </div>
+                <table className="table table-striped table-topics">
+                    <tr>
+                        <td>Created by</td>
+                        <td>{this.state.topic.creator_name}</td>
+                    </tr>
+                    <tr>
+                        <td>Created at</td>
+                        <td>{this.state.topic.created_at}</td>
+                    </tr>
+                    <tr>
+                        <td>Upvotes</td>
+                        <td>{this.state.topic.vote_count}</td>
+                    </tr>
+                </table>
                 <div className="panel-body">
-                    <table className="table table-striped table-topics">
-                        <tr>
-                            <td>Created by</td>
-                            <td>{this.state.topic.creator_name}</td>
-                        </tr>
-                        <tr>
-                            <td>Created at</td>
-                            <td>{this.state.topic.created_at}</td>
-                        </tr>
-                        <tr>
-                            <td>Upvotes</td>
-                            <td>{this.state.topic.vote_count}</td>
-                        </tr>
-                    </table>
                     <h4>My great idea is about:</h4>
                     <div className="row">
                         <div className="col-md-12">
