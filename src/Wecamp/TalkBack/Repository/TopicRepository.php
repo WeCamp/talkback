@@ -48,7 +48,7 @@ final class TopicRepository extends BaseRepository
         $format = $createdAt->format('Y-m-d H:i:s');
         $tempUser = 1;
 
-        $insert = "INSERT INTO topic (title, details, excerpt,creator, owned_by_creator, created_at)
+        $insert = "INSERT INTO topic (title, excerpt, details,creator, owned_by_creator, created_at)
                 VALUES (:title, :excerpt, :details, :creator, :ownedByCreator, :createdAt)";
         $stmt = $connection->prepare($insert);
 
@@ -95,10 +95,13 @@ final class TopicRepository extends BaseRepository
     {
         $connection = $this->getConnection();
 
-            $insert = "SELECT topic.title, topic.excerpt, topic.details, topic.owned_by_creator, topic.created_at,
-            user.name as creator_name, count(vote.voter) as vote_count FROM topic LEFT JOIN vote on topic.id = vote.topic
-            LEFT JOIN user on user.id = topic.creator WHERE topic.id=:id GROUP BY topic.id";
+        $insert = "SELECT topic.title, topic.excerpt, topic.details, topic.owned_by_creator, topic.created_at,
+        user.name as creator_name, count(vote.voter) as vote_count FROM topic LEFT JOIN vote on topic.id = vote.topic
+        LEFT JOIN user on user.id = topic.creator WHERE topic.id=:id GROUP BY topic.id";
 
+        $stmt = $connection->prepare("SELECT topic.title, topic.excerpt, topic.details, topic.owned_by_creator, topic.created_at,
+        user.name as creator_name, count(vote.voter) as vote_count FROM topic LEFT JOIN vote on topic.id = vote.topic
+        LEFT JOIN user on user.id = topic.creator WHERE topic.id=10 GROUP BY topic.id");
         $stmt = $connection->prepare($insert);
         $stmt->bindParam(':id', $id);
 
