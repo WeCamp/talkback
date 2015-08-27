@@ -81,10 +81,9 @@ $app['TopicController'] = $app->share(function() use ($app) {
 $app->post('/api/topics', 'TopicController:newTopic')->bind('api.topic.new');
 $app->get('/api/topics/{id}', 'TopicController:getTopicByIdentifier')->bind('api.topic.get_one');
 $app->get('/api/topics', 'TopicController:getAllTopics')->bind('api.topic.get_all');
-
-// Comment
-$app->post('/api/comments', 'TopicController:newComment')->bind('api.comment.new');
-$app->get('/api/comments/{id}', 'TopicController:getCommentByIdentifier')->bind('api.comment.get_one');
+// Topic Comment
+$app->post('/api/topic/{id}/comments', 'TopicController:newComment')->bind('api.comment.new');
+$app->get('/api/topic/{topicId}/comments/{commentId}', 'TopicController:getCommentByIdentifier')->bind('api.comment.get_one');
 
 // User
 $app->get('/api/users/{id}/badges', 'UserController:getBadges')->bind('api.user.badges');
