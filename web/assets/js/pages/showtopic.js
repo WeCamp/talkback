@@ -73,8 +73,8 @@ var Comments = React.createClass({
         $.get(this.props.source + topicId, function (result) {
             if (this.isMounted()) {
                 this.setState({
+                    topicId : topicId,
                     data: {
-                        topicId : topicId,
                         comments: result.comments
                     }
                 });
