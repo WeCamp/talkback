@@ -74,11 +74,17 @@ final class TopicRepository extends BaseRepository
         return '';
     }
 
-    public function getTopicByIdentifier($id)
+    /**
+     * @param $id
+     * @return false|array
+     */
+    public function getTopicWithID($id)
     {
         $connection = $this->getConnection();
+
         $insert = "SELECT topic.*, count(vote.voter) as vote_count FROM topic LEFT JOIN vote on topic.id = vote.topic
-        WHERE id=:id ";
+        WHERE topic.id=:id GROUP BY topic.id";
+
         $stmt = $connection->prepare($insert);
         $stmt->bindParam(':id', $id);
 
