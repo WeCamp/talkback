@@ -1,6 +1,9 @@
 /** @jsx React.DOM */
 
 var formMethods = {
+    renderHiddenInput: function (id, value) {
+        return <input type="hidden" className="form-control" id={id} value={value} ref={id}/>;
+    },
     renderTextInput: function(id, label) {
         return this.renderField(id, label,
             <input type="text" className="form-control" id={id} ref={id}/>
