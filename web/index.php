@@ -77,6 +77,12 @@ $app->get('/topic/add', function() use($app) {
     return $app['twig']->render('addtopic.html.twig');
 })->bind('addtopic');
 
+$app->get('/profile/badges', function() use ($app) {
+    return $app['twig']->render('profile/badges.html.twig');
+})->bind('profile.badges');
+
+
+
 $app->get('/setup', function() use($app) {
     /** @var \Wecamp\TalkBack\LoadFixtures $fixtures */
     $fixtures = $app['fixtures'];
