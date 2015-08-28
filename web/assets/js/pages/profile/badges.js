@@ -7,7 +7,9 @@ var BadgeList = React.createClass({
         };
     },
     componentDidMount: function () {
-        $.get(this.props.source, function(result) {
+        var userId = reactCookie.load('userId');
+        var url = '/api/users/'+userId+'/badges';
+        $.get(url, function(result) {
             if (this.isMounted()) {
                 this.setState({badges: result});
             }

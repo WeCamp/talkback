@@ -26,7 +26,8 @@ class TopicController extends AbstractController
      */
     public function newTopic(Request $request)
     {
-        $data = $request->request->all();
+        $data   = $request->request->all();
+        $userId = $request->headers->get('X-UserId');
 
         // @todo: This doesn't work with the boolean value currently
 //        $topicValidator = $this->getTopicValidator();
@@ -36,9 +37,7 @@ class TopicController extends AbstractController
 //            return $this->getInvalidDataResponse($lastErrors);
 //        }
 
-        $data['user'] = 1; // Temporary user
-
-        $topicId = $this->getTopicRepository()->createTopic($data);
+        $topicId = $this->getTopicRepository()->createTopic($data, $userId);
 
         if ($topicId === false) {
             return new JsonResponse(['error' => 'Could not create topic.'], 503);
@@ -46,7 +45,7 @@ class TopicController extends AbstractController
 
         $newData = $this->getTopicRepository()->getTopicByIdentifier($topicId);
 
-        $this->getDispatcher()->dispatch('topic.add', new TopicAddedEvent($data['user']));
+        $this->getDispatcher()->dispatch('topic.add', new TopicAddedEvent($userId));
 
         return new JsonResponse(
             [
@@ -59,7 +58,6 @@ class TopicController extends AbstractController
             ], 201
         );
     }
-
 
     /**
      * @return JsonResponse
@@ -74,7 +72,6 @@ class TopicController extends AbstractController
 
         return new JsonResponse($topics, 200);
     }
-
 
     /**
      * @param $id
@@ -93,7 +90,6 @@ class TopicController extends AbstractController
 
         return new JsonResponse($topic, 200);
     }
-
 
     /**
      * @param Request $request
@@ -132,7 +128,7 @@ class TopicController extends AbstractController
             return new JsonResponse(['error' => 'Could not create comment.'], 503);
         }
 
-        $this->dispatcher->dispatch('topic.comment', new TopicCommentAddedEvent($data['user']));
+        $this->getDispatcher()->dispatch('topic.comment', new TopicCommentAddedEvent($data['user']));
 
         $newData = $this->getTopicRepository()->getCommentByIdentifier($commentId);
 
@@ -146,7 +142,6 @@ class TopicController extends AbstractController
             ], 201
         );
     }
-
 
     /**
      * @param $id
@@ -163,7 +158,6 @@ class TopicController extends AbstractController
 
         return new JsonResponse($comment, 200);
     }
-
 
     /**
      * @param Request $request
@@ -184,7 +178,6 @@ class TopicController extends AbstractController
         return new JsonResponse('ok', 201);
     }
 
-
     /**
      * @return JsonResponse
      */
@@ -199,7 +192,6 @@ class TopicController extends AbstractController
         return new JsonResponse($topics, 200);
     }
 
-
     // -----------------------------------------------------------------------------------------------------------------
     // Getters and Setters
     // -----------------------------------------------------------------------------------------------------------------
@@ -212,7 +204,6 @@ class TopicController extends AbstractController
         return $this->app['topicRepository'];
     }
 
-
     /**
      * @return EventDispatcher
      */
@@ -220,7 +211,6 @@ class TopicController extends AbstractController
     {
         return $this->app['dispatcher'];
     }
-
 
     /**
      * @return TopicValidator
@@ -230,7 +220,6 @@ class TopicController extends AbstractController
         return $this->app['topicValidator'];
     }
 
-
     /**
      * @return CommentValidator
      */
@@ -239,4 +228,3 @@ class TopicController extends AbstractController
         return $this->app['commentValidator'];
     }
 }
-
