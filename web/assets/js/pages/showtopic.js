@@ -232,6 +232,10 @@ var CommentForm = React.createClass({
             type: 'POST',
             url: comment_new_url,
             data: data,
+            beforeSend: function(xhr) {
+                var userId = reactCookie.load('userId');
+                xhr.setRequestHeader('X-UserId', userId);
+            },
             success: function(data) {
 
                 if (undefined == this.props.parent) {
