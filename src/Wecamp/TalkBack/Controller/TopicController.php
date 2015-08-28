@@ -128,7 +128,7 @@ class TopicController extends AbstractController
             return new JsonResponse(['error' => 'Could not create comment.'], 503);
         }
 
-        $this->getDispatcher()->dispatch('topic.comment', new TopicCommentAddedEvent($data['user']));
+        $this->getDispatcher()->dispatch('topic.comment', new TopicCommentAddedEvent($userId));
 
         $newData = $this->getTopicRepository()->getCommentByIdentifier($commentId);
 
