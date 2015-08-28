@@ -189,7 +189,7 @@ class TopicController extends AbstractController
      */
     public function getAllDetailedTopics()
     {
-        $topics = $this->topicRepository->getAllDetailedTopics();
+        $topics = $this->getTopicRepository()->getAllDetailedTopics();
 
         if ($topics === false) {
             return new JsonResponse(['error' => 'No topics found'], 404);
