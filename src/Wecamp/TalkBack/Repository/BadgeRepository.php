@@ -61,6 +61,28 @@ class BadgeRepository extends BaseRepository
     }
 
     /**
+     * @param string $eventName
+     *
+     * @return array
+     */
+    public function findOneBadgeByName($badgeName)
+    {
+        $connection = $this->getConnection();
+        $insert =  "SELECT * FROM badge WHERE name = :name";
+        $stmt = $connection->prepare($insert);
+
+        $stmt->bindParam(':name', $badgeName);
+
+        try{
+            $stmt->execute();
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        }catch(\PDOException $e){
+            //todo: log this!
+            return [];
+        }
+    }
+
+    /**
      * @param int $user
      * @param string $eventName
      *
@@ -112,6 +134,32 @@ class BadgeRepository extends BaseRepository
         }catch(\PDOException $e) {
             //todo: log this!
             var_dump($e);
+        }
+    }
+
+
+    /**
+     * get's the user earned badges
+     *
+     * @param $userIdentifier
+     *
+     * @return false|array
+     */
+    public function getEarnedBadges($userIdentifier)
+    {
+        $connection = $this->getConnection();
+
+        $insert = "SELECT  badge.name as name, badge.icon, earned_badge.created_at FROM earned_badge INNER JOIN badge on earned_badge.badge = badge.id WHERE user=:userID";
+        $stmt = $connection->prepare($insert);
+
+        $stmt->bindParam(':userID', $userIdentifier);
+
+        try{
+            $stmt->execute();
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        }catch(\PDOException $e){
+            //todo: log this!
+            return false;
         }
     }
 }

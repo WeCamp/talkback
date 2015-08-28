@@ -5,8 +5,13 @@
     <script src="/assets/js/vendor/JSXTransformer.js"></script>
     {#<script src="/assets/js/vendor/react.min.js"></script>#}
     <script src="/assets/js/vendor/react.js"></script>
-    <link rel="stylesheet" href="/assets/css/vendor/bootstrap.min.css">
-    <link rel="stylesheet" href="/assets/css/style.css">
+    <script src="/assets/js/vendor/react-cookie.min.js"></script>
+
+    {% block stylesheets %}
+        <link rel="stylesheet" href="/assets/css/vendor/bootstrap.min.css">
+        <link rel="stylesheet" href="/assets/css/style.css">
+        <link rel="stylesheet" href="/assets/css/theme/main.css">
+    {% endblock %}
 </head>
 <body>
 <div class="container">

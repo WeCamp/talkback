@@ -37,10 +37,12 @@ final class TopicRepository extends BaseRepository
     }
 
     /**
-     * @param $data
+     * @param array $data
+     * @param int $user
+     *
      * @return bool|string
      */
-    public function createTopic(array $data)
+    public function createTopic(array $data, $user)
     {
         $createdAt = new \DateTime();
         $connection = $this->getConnection();
@@ -53,7 +55,7 @@ final class TopicRepository extends BaseRepository
         $stmt->bindParam(':title', $data['title']);
         $stmt->bindParam(':details', $data['details']);
         $stmt->bindParam(':excerpt', $data['excerpt']);
-        $stmt->bindParam(':creator', $data['user']);
+        $stmt->bindParam(':creator', $user);
         $stmt->bindParam(':ownedByCreator', $data['owned_by_creator']);
         $stmt->bindParam(':createdAt', $format);
 
@@ -109,7 +111,6 @@ final class TopicRepository extends BaseRepository
             }
     }
 
-
     /**
      * @param $topicIdentifier
      * @return array|bool
@@ -132,19 +133,24 @@ final class TopicRepository extends BaseRepository
         }
     }
 
-    public function createComment(array $data)
+    /**
+     * @param array $data
+     * @param int $user
+     *
+     * @return bool|string
+     */
+    public function createComment(array $data, $user)
     {
         $createdAt = new \DateTime();
         $connection = $this->getConnection();
         $format = $createdAt->format('Y-m-d H:i:s');
-        $tempUser = 2;
 
         $insert = "INSERT INTO comment (topic, commenter, content, created_at)
                 VALUES (:topic, :commenter, :content, :created_at)";
         $stmt = $connection->prepare($insert);
 
         $stmt->bindParam(':topic', $data['topic']);
-        $stmt->bindParam(':commenter', $tempUser);
+        $stmt->bindParam(':commenter', $user);
         $stmt->bindParam(':content', $data['content']);
         $stmt->bindParam(':created_at', $format);
 
@@ -156,7 +162,6 @@ final class TopicRepository extends BaseRepository
             return false;
         }
     }
-
 
     /**
      * @param $id
@@ -180,4 +185,50 @@ final class TopicRepository extends BaseRepository
         }
     }
 
+    /**
+     * @param int $topic
+     * @param int $user
+     * @param \DateTime $createdAt
+     *
+     * @return bool
+     */
+    public function addVote($topic, $user, \DateTime $createdAt)
+    {
+        $connection = $this->getConnection();
+        $format = $createdAt->format('Y-m-d H:i:s');
+
+        $insert = "INSERT INTO vote (topic, voter, created_at)
+                VALUES (:topic, :voter, :created_at)";
+        $stmt = $connection->prepare($insert);
+
+        $stmt->bindParam(':topic', $topic);
+        $stmt->bindParam(':voter', $user);
+        $stmt->bindParam(':created_at', $format);
+
+        try {
+            $stmt->execute();
+            return true;
+        }catch(\PDOException $e) {
+            //todo: log this!
+            return false;
+        }
+    }
+
+
+    public function getAllDetailedTopics()
+    {
+        $connection = $this->getConnection();
+        $insert =  "SELECT topic.id, topic.details, topic.title, topic.excerpt, topic.owned_by_creator, topic.created_at,
+            user.name as creator_name, count(vote.voter) as vote_count FROM topic LEFT JOIN vote on topic.id = vote.topic
+            LEFT JOIN user on user.id = topic.creator GROUP BY topic.id";
+        $stmt = $connection->prepare($insert);
+
+        try{
+            $stmt->execute();
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        }catch(\PDOException $e){
+            //todo: log this!
+            return false;
+        }
+    }
 }

@@ -26,6 +26,35 @@ var ShowTopic = React.createClass({
         }.bind(this));
     },
 
+    vote: function(event) {
+        event.stopPropagation();
+
+        var url = '/api/topics/' + this.state.topic.id + '/vote';
+        var data = {
+            topic: this.state.topic.id
+        };
+
+        var self = this;
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: data,
+            beforeSend: function(xhr) {
+                var userId = reactCookie.load('userId');
+                xhr.setRequestHeader('X-UserId', userId);
+            },
+            success: function(data) {
+                var topic = self.state.topic;
+                topic.vote_count = parseInt(topic.vote_count) + 1;
+                self.setState({topic: topic});
+            },
+            error: function(jqXHR, status, error) {
+                console.log(status, jqXHR.responseJSON, error);
+            }.bind(this)
+        });
+    },
+
     render: function() {
         return <div>
             <div className="panel panel-default">
@@ -129,7 +158,7 @@ var Comments = React.createClass({
                 </div>
             </div>
         </div>
-    },
+    }
 });
 
 var CommentList = React.createClass({
@@ -162,7 +191,7 @@ var CommentList = React.createClass({
                 })
             }
         </div>
-    },
+    }
 });
 
 var CommentForm = React.createClass({

@@ -49,7 +49,7 @@ abstract class AbstractController
 
         return new JsonResponse(
             [
-                'errors'            => [
+                'errors' => [
                     [
                         'message' => 'Data is invalid',
                     ],

@@ -116,6 +116,7 @@ class TopicController extends AbstractController
 
         $data          = $request->request->all();
         $data['topic'] = (int)$topicId;
+        $userId        = $request->headers->get('X-UserId');
 
         $commentValidator = $this->getCommentValidator();
         if ($commentValidator->isNewCommentValid($data) !== true) {
@@ -124,17 +125,19 @@ class TopicController extends AbstractController
             return $this->getInvalidDataResponse($lastErrors);
         }
 
-        $commentID = $this->getTopicRepository()->createComment($data);
+        $commentId = $this->getTopicRepository()->createComment($data, $userId);
 
-        if ($commentID === false) {
-            return new JsonResponse(['error' => 'Could not create comment.'], 400);
+        if ($commentId === false) {
+            return new JsonResponse(['error' => 'Could not create comment.'], 503);
         }
 
-        $newData = $this->getTopicRepository()->getCommentByIdentifier($commentID);
+        $this->dispatcher->dispatch('topic.comment', new TopicCommentAddedEvent($data['user']));
+
+        $newData = $this->getTopicRepository()->getCommentByIdentifier($commentId);
 
         return new JsonResponse(
             [
-                'id'         => (int)$commentID,
+                'id'         => (int)$commentId,
                 'topic'      => (int)$newData['topic'],
                 'commenter'  => $newData['commenter'],
                 'content'    => $newData['content'],
@@ -160,6 +163,45 @@ class TopicController extends AbstractController
         return new JsonResponse($comment, 200);
     }
 
+
+    /**
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function addVote(Request $request)
+    {
+        $topic  = $request->get('topic');
+        $userId = $request->headers->get('X-UserId');
+
+        $success = $this->topicRepository->addVote($topic, $userId, new \DateTime());
+
+        if ($success === false) {
+            return new JsonResponse(['error' => 'Could not create vote.'], 503);
+        }
+
+        return new JsonResponse('ok', 201);
+    }
+
+
+    /**
+     * @return JsonResponse
+     */
+    public function getAllDetailedTopics()
+    {
+        $topics = $this->topicRepository->getAllDetailedTopics();
+
+        if ($topics === false) {
+            return new JsonResponse(['error' => 'No topics found'], 404);
+        }
+
+        return new JsonResponse($topics, 200);
+    }
+
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // Getters and Setters
+    // -----------------------------------------------------------------------------------------------------------------
 
     /**
      * @return TopicRepository

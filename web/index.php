@@ -3,6 +3,7 @@
 require_once __DIR__.'/../vendor/autoload.php';
 
 use Symfony\Component\HttpFoundation\Request;
+use Wecamp\TalkBack\Controller\TopicController;
 use Wecamp\TalkBack\Validate\CommentValidator;
 use Wecamp\TalkBack\Validate\TopicValidator;
 
@@ -73,20 +74,24 @@ $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
  * API Controllers & routes
  */
 $app['TopicController'] = $app->share(function() use ($app) {
-    return new \Wecamp\TalkBack\Controller\TopicController($app);;
+    return new TopicController($app);
+});
+
+$app['UserController'] = $app->share(function() use ($app) {
+    return new \Wecamp\TalkBack\Controller\UserController($app['badgeRepository']);
 });
 
 // Topic
 $app->post('/api/topics', 'TopicController:newTopic')->bind('api.topic.new');
+$app->get('/api/topics/detailed', 'TopicController:getAllDetailedTopics');
 $app->get('/api/topics/{id}', 'TopicController:getTopicByIdentifier')->bind('api.topic.get_one');
 $app->get('/api/topics', 'TopicController:getAllTopics')->bind('api.topic.get_all');
-// Topic Comment
 $app->post('/api/topic/{topicId}/comments', 'TopicController:newComment')->bind('api.comment.new');
 $app->get('/api/topic/{topicId}/comments/{commentId}', 'TopicController:getCommentByIdentifier')->bind('api.comment.get_one');
+$app->post('/api/topics/{id}/vote', 'TopicController:addVote')->bind('api.topic.vote');
 
 // User
-$app->get('/api/users/{id}/badges', 'UserController:getBadges')->bind('api.user.badges');
-
+$app->get('/api/users/{id}/badges', 'UserController:getEarnedBadges')->bind('api.user.badges');
 
 /**
  * HTML pages
@@ -106,6 +111,10 @@ $app->get('/topic/add', function() use($app) {
 $app->get('/topic/{id}', function($id) use($app) {
     return $app['twig']->render('showtopic.html.twig', ['id' => $id]);
 })->bind('showtopic');
+
+$app->get('/profile/change', function() use ($app) {
+    return $app['twig']->render('profile/change.html.twig');
+})->bind('profile.change');
 
 $app->get('/profile/badges', function() use ($app) {
     /**

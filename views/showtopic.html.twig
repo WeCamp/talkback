@@ -1,5 +1,10 @@
 {% extends "layout.html.twig" %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
+{% endblock %}
+
 {% block javascript %}
     {{ parent() }}
     <script type="text/jsx" src="/assets/js/modules/methods.js"></script>

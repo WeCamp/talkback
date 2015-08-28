@@ -49,8 +49,8 @@ var AddTopicForm = React.createClass({
             excerpt: this.refs.excerpt.getDOMNode().value,
             details: this.refs.details.getDOMNode().value,
             owned_by_creator: this.refs.owned_by_userYes.getDOMNode().checked
-        }
-        return data
+        };
+        return data;
     },
     handleSubmit: function() {
         var data = this.getFormData();
@@ -58,6 +58,10 @@ var AddTopicForm = React.createClass({
             type: 'POST',
             url: '/api/topics',
             data: data,
+            beforeSend: function(xhr) {
+                var userId = reactCookie.load('userId');
+                xhr.setRequestHeader('X-UserId', userId);
+            },
             success: function(data) {
                 window.location.href = '/';
             },
@@ -65,7 +69,7 @@ var AddTopicForm = React.createClass({
                 console.log(status, jqXHR.responseJSON, error);
             }.bind(this)
         });
-    },
+    }
 });
 
 React.render(<AddTopicForm/>, document.getElementById('addtopicform'));
