@@ -53,7 +53,7 @@ var ShowTopic = React.createClass({
         });
     },
     render: function() {
-        return <div>
+       /* return <div>
             <div className="panel panel-default">
                 <div className="panel-heading clearfix">
                     <h3 className="panel-title pull-left">{this.state.topic.title}</h3>
@@ -84,7 +84,23 @@ var ShowTopic = React.createClass({
                 </div>
             </div>
             <Comments source="/api/topics/"/>
-        </div>
+        </div>*/
+
+        return   <div><section id="banner">
+            <header>
+                <h2>{this.state.topic.title}</h2>
+            </header>
+            <p>By {this.state.topic.creator_name}</p>
+            </section>
+            <article className="container box style3">
+            <header>
+                <p className="TopicCreationDate">Creation date : {this.state.topic.created_at}</p>
+                <p className="TopicVoteContainer" onClick={this.vote}>{this.state.topic.vote_count} <i className="fa fa-thumbs-up"></i></p>
+            </header>
+                <hr />
+                {this.state.topic.details}
+            </article>
+            </div>
     }
 });
 

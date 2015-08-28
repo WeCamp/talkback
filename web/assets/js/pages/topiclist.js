@@ -5,15 +5,27 @@ var TopicRow = React.createClass({
         return this.props;
     },
     render: function() {
-        return <tr onClick={this.handleClick}>
+      /*  return <tr onClick={this.handleClick}>
             <td>{this.state.topic.creator_name}</td>
             <td>{this.state.topic.title}</td>
             <td>{this.state.topic.excerpt}</td>
             <td>{this.state.topic.created_at}</td>
             <td onClick={this.vote}>
-                {this.state.topic.vote_count} <i className="fa fa-thumbs-up"></i>
+                {this.state.topic.vote_count} < i className="fa fa-thumbs-up"></i>
             </td>
-        </tr>
+        </tr>*/
+
+        return <article id="first" className="container box style1 right">
+            <div class="inner">
+                <header>
+                    <h2>{this.state.topic.title}</h2><h4>- {this.state.topic.creator_name}</h4>
+                </header>
+                <p>{this.state.topic.excerpt}</p>
+                <p className="voteContainer" onClick={this.vote}> {this.state.topic.vote_count} < i className="fa fa-thumbs-up"></i></p>
+                <p className="created_at">Creation date : {this.state.topic.created_at}</p>
+                <p className="readMore" onClick={this.handleClick}>Read More...</p>
+            </div>
+        </article>
     },
     handleClick: function(event) {
         window.location.href = '/topic/' + this.props.topic.id;
@@ -62,28 +74,10 @@ var TopicList = React.createClass({
         }.bind(this));
     },
     render: function() {
-        return <div className="panel panel-default">
-            <div className="panel-heading clearfix">
-                <h3 className="panel-title pull-left">Topics</h3>
-            </div>
-            <div className="panel-body">
-                <table className="table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th>Creator</th>
-                            <th>Topic</th>
-                            <th>Excerpt</th>
-                            <th>Created</th>
-                            <th>Votes</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+        return <div className="">
                     {this.state.topics.map(function(topic, i) {
                         return <TopicRow topic={topic} key={i} />;
                     })}
-                    </tbody>
-                </table>
-            </div>
         </div>
     }
 });
