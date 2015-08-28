@@ -174,7 +174,7 @@ class TopicController extends AbstractController
         $topic  = $request->get('topic');
         $userId = $request->headers->get('X-UserId');
 
-        $success = $this->topicRepository->addVote($topic, $userId, new \DateTime());
+        $success = $this->getTopicRepository()->addVote($topic, $userId, new \DateTime());
 
         if ($success === false) {
             return new JsonResponse(['error' => 'Could not create vote.'], 503);
