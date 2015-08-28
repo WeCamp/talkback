@@ -1759,7 +1759,7 @@
 
 	.box {
 		position: relative;
-		margin-top: 9em;
+		margin-top: 5em;
 		margin-bottom: 0;
 	}
 
@@ -1767,7 +1767,7 @@
 			content: '';
 			display: block;
 			position: absolute;
-			top: -9em;
+			top: -5em;
 			left: 50%;
 			height: 9em;
 			border-left: solid 1px #fff;
@@ -1780,7 +1780,7 @@
 			height: 66px;
 			position: absolute;
 			left: 50%;
-			top: -4.5em;
+			top: -2.5em;
 			margin-left: -45px;
 			margin-top: -33px;
 			background: url("images/arrow.svg") no-repeat;
@@ -1825,7 +1825,6 @@
 				}
 
 			.box.style1.right .inner {
-				margin-left: 50%;
 				padding-left: 3em;
 			}
 
@@ -2001,7 +2000,7 @@
 		text-shadow: 0 0 0.5px rgba(255, 255, 255, 0.25);
 		text-align: center;
 		background: #35b88f url("images/banner.svg") bottom center no-repeat;
-		padding: 5em 0 5em 0;
+		padding: 2em 0 2em 0;
 		margin: 0;
 		background-size: 125% auto;
 	}

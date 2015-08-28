@@ -55,35 +55,25 @@ var ShowTopic = React.createClass({
         });
     },
 
-    render: function() {
+
         return <div>
-            <div className="panel panel-default">
-                <div className="panel-heading clearfix">
-                    <h3 className="panel-title pull-left">{this.state.topic.title}</h3>
-                </div>
-                <table className="table table-striped table-topics">
-                    <tr>
-                        <td>Created by</td>
-                        <td>{this.state.topic.creator_name}</td>
-                    </tr>
-                    <tr>
-                        <td>Created at</td>
-                        <td>{this.state.topic.created_at}</td>
-                    </tr>
-                    <tr>
-                        <td>Upvotes</td>
-                        <td>{this.state.topic.vote_count}</td>
-                    </tr>
-                </table>
-                <div className="panel-body">
-                    <h4>My great idea is about:</h4>
-                    <div className="row">
-                        <div className="col-md-12">
-                            {this.state.topic.details}
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <section id="banner">
+                <header>
+                    <h2>{this.state.topic.title}</h2>
+                </header>
+                <p>By {this.state.topic.creator_name}</p>
+            </section>
+            <article className="container box style3">
+                <header>
+                    <p className="TopicCreationDate">Creation date : {this.state.topic.created_at}</p>
+
+                    <p className="TopicVoteContainer" onClick={this.vote}>{this.state.topic.vote_count} <i
+                        className="fa fa-thumbs-up"></i></p>
+                </header>
+                <hr />
+                {this.state.topic.details}
+            </article>
+
             <Comments topic={this.state.topic}/>
         </div>
     }
