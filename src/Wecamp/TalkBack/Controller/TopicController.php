@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
 use Wecamp\TalkBack\Event\TopicAddedEvent;
+use Wecamp\TalkBack\Event\TopicCommentAddedEvent;
 use Wecamp\TalkBack\Repository\TopicRepository;
 use Wecamp\TalkBack\Validate\CommentValidator;
 use Wecamp\TalkBack\Validate\TopicValidator;
