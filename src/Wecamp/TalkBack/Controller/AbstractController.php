@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: toby
- * Date: 27/08/15
- * Time: 12:58
- */
 
 namespace Wecamp\TalkBack\Controller;
 
@@ -24,15 +18,13 @@ abstract class AbstractController
      */
     protected $app;
 
-
     /**
      * @param Application $app
      */
-    final public function __construct(Application $app)
+    public function __construct(Application $app)
     {
         $this->app = $app;
     }
-
 
     /**
      * @param ConstraintViolationListInterface $lastErrors

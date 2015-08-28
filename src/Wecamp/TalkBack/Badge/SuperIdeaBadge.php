@@ -47,9 +47,12 @@ class SuperIdeaBadge implements Badge
     public function calculate($event)
     {
         $badge = $this->repository->findOneBadgeByName('Super idea');
-        if (count($this->repository->findEventsByUserAndEventName($event->getUser(), $badge['id'])) > 0) {
+        $events = $this->repository->findEventsByUserAndEventName($event->getUser(), 'topic.add');
+
+        if (count($events) > 1) {
             return;
         }
+
         $this->repository->earnBadge($event->getUser(), $badge['id'], new \DateTime());
     }
 }
