@@ -83,6 +83,29 @@ class BadgeRepository extends BaseRepository
     }
 
     /**
+     * @param string $eventName
+     *
+     * @return array
+     */
+    public function findEarnedBadgeByBadgeAndUser($badgeId, $userId)
+    {
+        $connection = $this->getConnection();
+        $insert =  'SELECT * FROM earned_badge WHERE badge = :badge AND user = :user;';
+        $stmt = $connection->prepare($insert);
+
+        $stmt->bindParam(':badge', $badgeId);
+        $stmt->bindParam(':user', $userId);
+
+        try{
+            $stmt->execute();
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        }catch(\PDOException $e){
+            //todo: log this!
+            return [];
+        }
+    }
+
+    /**
      * @param int $user
      * @param string $eventName
      *
