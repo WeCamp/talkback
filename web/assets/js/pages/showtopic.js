@@ -55,7 +55,7 @@ var ShowTopic = React.createClass({
         });
     },
 
-
+    render: function() {
         return <div>
             <section id="banner">
                 <header>
