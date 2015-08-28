@@ -101,26 +101,26 @@ $app->get('/', function() use($app) {
 })->bind('homepage');
 
 $app->get('/topics', function() use($app) {
-    return $app['twig']->render('topiclist.html.twig');
+    return $app['twig']->render('topiclist.html.twig', ['header_title' => 'browse topics', 'header_underline' => 'Read and vote on topics you like.']);
 })->bind('topiclist');
 
 $app->get('/topic/add', function() use($app) {
-    return $app['twig']->render('addtopic.html.twig');
+    return $app['twig']->render('addtopic.html.twig', ['header_title' => 'add a new topic', 'header_underline' => 'Share your creativity']);
 })->bind('addtopic');
 
 $app->get('/topic/{id}', function($id) use($app) {
-    return $app['twig']->render('showtopic.html.twig', ['id' => $id]);
+    return $app['twig']->render('showtopic.html.twig', ['id' => $id,'header_title' => 'Topic', 'header_underline' => 'Amazing topic']); //todo: fix this with dynamic header and subline
 })->bind('showtopic');
 
 $app->get('/profile/change', function() use ($app) {
-    return $app['twig']->render('profile/change.html.twig');
+    return $app['twig']->render('profile/change.html.twig', ['header_title' => 'Change User', 'header_underline' => 'Change to whatever you like.']);
 })->bind('profile.change');
 
 $app->get('/profile/badges', function() use ($app) {
     /**
      * @todo - Updated to use user ID of current user
      */
-    return $app['twig']->render('profile/badges.html.twig', ['user_id' => 1]);
+    return $app['twig']->render('profile/badges.html.twig', ['user_id' => 1, 'header_title' => 'Badges', 'header_underline' => 'Watch your awesomeness.']);
 })->bind('profile.badges');
 
 

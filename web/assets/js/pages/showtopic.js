@@ -56,13 +56,11 @@ var ShowTopic = React.createClass({
     },
 
     render: function() {
+
+        document.getElementById('header_title').innerHTML = this.state.topic.title;
+        document.getElementById('header_underline').innerHTML = this.state.topic.creator_name;
+
         return <div>
-            <section id="banner">
-                <header>
-                    <h2>{this.state.topic.title}</h2>
-                </header>
-                <p>By {this.state.topic.creator_name}</p>
-            </section>
             <article className="container box style3">
                 <header>
                     <p className="TopicCreationDate">Creation date : {this.state.topic.created_at}</p>

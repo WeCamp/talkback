@@ -14,7 +14,24 @@
     {% endblock %}
 </head>
 <body>
+
 <div class="TalkBackWrapper">
+    {% block header %}
+    <section id="banner">
+        <ul >
+            <li class="menuItem"><a href="{{ app.url_generator.generate('homepage') }}">Home</a></li>
+            <li class="menuItem"><a href="{{ app.url_generator.generate('topiclist') }}">Topics</a></li>
+            <li class="menuItem"><a href="{{ app.url_generator.generate('addtopic') }}">Add New Topic</a></li>
+            <li class="menuItem"><a href="{{ app.url_generator.generate('profile.change') }}">Change User</a></li>
+            <li class="menuItem"><a href="{{ app.url_generator.generate('profile.badges') }}">Badges</a></li>
+        </ul>
+        <header>
+            <h2 id="header_title">{{ header_title }}</h2>
+        </header>
+        <p id="header_underline">{{ header_underline }}</p>
+
+    </section>
+    {% endblock %}
     {% block body %}
     {% endblock %}
     <section id="footer">
