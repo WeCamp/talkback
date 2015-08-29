@@ -83,15 +83,21 @@ textarea {
 .menuItem {
     display: inline-block;
     padding: 10px;
+}
 
+.menuItem a {
+    -webkit-transition: all 1s ease-out !important;
+    -moz-transition: all 1s ease-out !important;
+    -ms-transition: all 1s ease-out !important;
+    -o-transition: all 1s ease-out !important;
+    transition: all 1s ease-out !important;
+}
+
+.menuItem a:hover {
+    padding: 20px;
 }
 
 #content {
-    -moz-transition: background-color 0.35s ease-in-out;
-    -webkit-transition: background-color 0.35s ease-in-out;
-    -ms-transition: background-color 0.35s ease-in-out;
-    transition: background-color 0.35s ease-in-out;
-    -webkit-appearance: none;
     display: block;
     border: 0;
     background: #f1f1f1;

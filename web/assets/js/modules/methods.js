@@ -26,8 +26,8 @@ var formMethods = {
     },
     renderField: function(id, label, field) {
         return <div className={$c('form-group', {'has-error': id in this.state.errors})}>
-            <label htmlFor={id} className="col-sm-4 control-label">{label}</label>
-            <div className="col-sm-6">
+            <label htmlFor={id} className="col-sm-12 control-label">{label}</label>
+            <div className="col-sm-12">
                 {field}
             </div>
         </div>
