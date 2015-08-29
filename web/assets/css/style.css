@@ -23,6 +23,10 @@ textarea {
     width: 100%;
 }
 
+.badgeEntry span {
+    color: #3a3939;
+}
+
 .created_at {
     position: absolute;
     bottom: 2%;

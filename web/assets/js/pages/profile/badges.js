@@ -16,14 +16,23 @@ var BadgeList = React.createClass({
         }.bind(this));
     },
     render: function () {
-        return <div>
+       /* return <div>
             <h1>My Badges</h1>
             <div className="row">
                 {this.state.badges.map(function (badge, i) {
                     return <BadgeRow badge={badge} key={i}/>;
                 })}
             </div>
-        </div>;
+        </div>;*/
+
+
+        return <article className="container box style3">
+            <div className="row">
+                {this.state.badges.map(function (badge, i) {
+                    return <BadgeRow badge={badge} key={i}/>;
+                })}
+            </div>
+                    </article>;
     }
 });
 
