@@ -113,3 +113,17 @@ textarea {
 #my-badges {
     color: white;
 }
+
+.ProfilePage {
+    min-height: 400px;
+}
+
+.UserSet {
+    text-align: center;
+    display: none;
+}
+
+.UserSet span {
+    padding: 10px;
+    background-color: #35b88f;
+}
