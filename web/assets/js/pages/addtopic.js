@@ -54,7 +54,7 @@ var AddTopicForm = React.createClass({
                 xhr.setRequestHeader('X-UserId', userId);
             },
             success: function(data) {
-                window.location.href = '/';
+                window.location.href = '/topic/'+data.id;
             },
             error: function(jqXHR, status, error) {
                 console.log(status, jqXHR.responseJSON, error);
