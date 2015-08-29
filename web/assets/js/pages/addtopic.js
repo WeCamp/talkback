@@ -9,7 +9,7 @@ var AddTopicForm = React.createClass({
         }
     },
     render: function() {
-        var submitted
+        var submitted;
         if (this.state.submitted !== null) {
             submitted = <div className="alert alert-success">
                 <p>Much submit. wow</p>
@@ -17,10 +17,7 @@ var AddTopicForm = React.createClass({
         }
 
         return <div>
-            <div className="panel panel-default">
-                <div className="panel-heading clearfix">
-                    <h3 className="panel-title pull-left">Add topic</h3>
-                </div>
+            <article className="container box style3 ProfilePage">
                 <div className="panel-body">
                     {submitted}
                     <div className="form-horizontal">
@@ -33,14 +30,8 @@ var AddTopicForm = React.createClass({
                         })}
                     </div>
                 </div>
-                <div className="panel-footer">
-                    <div className="row">
-                        <div className="col-md-2">
-                            <button type="button" className="btn btn-primary btn-block" onClick={this.handleSubmit}>Submit</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                            <button type="button" onClick={this.handleSubmit}>Submit</button>
+            </article>
         </div>
     },
     getFormData: function() {

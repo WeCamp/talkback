@@ -127,3 +127,7 @@ textarea {
     padding: 10px;
     background-color: #35b88f;
 }
+
+.control-label {
+    text-align:left !important;
+}
