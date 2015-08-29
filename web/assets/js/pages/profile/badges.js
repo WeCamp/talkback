@@ -39,7 +39,7 @@ var BadgeList = React.createClass({
 
 var BadgeRow = React.createClass({
     render: function () {
-        return <div className="col-xs-12 col-md-4 col-lg-2 badgeEntry">
+        return <div className="col-xs-12 col-md-4 col-lg-3 badgeEntry">
             <img src={"/assets/images/" + this.props.badge.icon} />
             <span>{this.props.badge.name}</span>
         </div>;
