@@ -7,7 +7,6 @@
 
 
 {% block body %}
-    <h1>My Badges</h1>
     <div id="my-badges" data-user-id="{{ user_id }}"
          data-source="{{ app.url_generator.generate('api.user.badges', {'id': user_id}) }}"></div>
 {% endblock %}

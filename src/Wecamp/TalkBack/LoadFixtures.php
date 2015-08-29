@@ -83,7 +83,7 @@ class LoadFixtures
         $badges = [
             [
                 'name' => 'Super idea',
-                'icon' => 'superidea.png',
+                'icon' => 'super-idea-badge.png',
             ],
         ];
 

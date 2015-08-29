@@ -82,7 +82,6 @@ textarea {
 
 }
 
-
 #content {
     -moz-transition: background-color 0.35s ease-in-out;
     -webkit-transition: background-color 0.35s ease-in-out;
@@ -99,4 +98,8 @@ textarea {
 
 .submitCommentButton {
     text-align: center;
+}
+
+#my-badges {
+    color: white;
 }
