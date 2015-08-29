@@ -214,7 +214,6 @@ final class TopicRepository extends BaseRepository
         }
     }
 
-
     public function getAllDetailedTopics()
     {
         $connection = $this->getConnection();

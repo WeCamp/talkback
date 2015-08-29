@@ -2,16 +2,19 @@
 
 namespace Wecamp\TalkBack\Badge;
 
-use Wecamp\TalkBack\Event\TopicAddedEvent;
+use Wecamp\TalkBack\Event\TopicCommentAddedEvent;
 use Wecamp\TalkBack\Repository\BadgeRepository;
+use Wecamp\TalkBack\Repository\UserRepository;
 
-class SuperIdeaBadge implements Badge
+class SwingBackBadge implements Badge
 {
-    private $repository;
+    private $badgeRepository;
+    private $userRepository;
 
-    public function __construct(BadgeRepository $repository)
+    public function __construct(BadgeRepository $badgeRepository, UserRepository $userRepository)
     {
-        $this->repository = $repository;
+        $this->badgeRepository = $badgeRepository;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -37,19 +40,27 @@ class SuperIdeaBadge implements Badge
     public static function getSubscribedEvents()
     {
         return array(
-            'topic.add'=> 'calculate',
+            'topic.comment' => 'calculate',
+            'topic.vote' => 'calculate',
         );
     }
 
     /**
-     * @param TopicAddedEvent $event
+     * @param TopicCommentAddedEvent $event
      */
     public function calculate($event)
     {
-        $badge = $this->repository->findOneBadgeByName('Super idea');
-        if (count($this->repository->findEventsByUserAndEventName($event->getUser(), $badge['id'])) > 0) {
+        $badge = $this->badgeRepository->findOneBadgeByName('Swing back!');
+        if (count($this->badgeRepository->findEarnedBadgeByBadgeAndUser($event->getUser(), $badge['id'])) > 0) {
             return;
         }
-        $this->repository->earnBadge($event->getUser(), $badge['id'], new \DateTime());
+echo '<pre>';
+var_dump($this->userRepository->checkUserForVoteAndComment($event->getUser(), $event->getTopic()));
+die('</pre>');
+        if (count($this->userRepository->checkUserForVoteAndComment($event->getUser(), $event->getTopic())) < 1) {
+            return;
+        }
+
+        $this->badgeRepository->earnBadge($event->getUser(), $badge['id'], new \DateTime());
     }
 }

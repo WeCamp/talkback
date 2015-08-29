@@ -62,6 +62,13 @@ $app['superIdeaBadge'] = $app->share(function() use ($app) {
     return new \Wecamp\TalkBack\Badge\SuperIdeaBadge($app['badgeRepository']);
 });
 
+$app['swingBackBadge'] = $app->share(function() use ($app) {
+    return new \Wecamp\TalkBack\Badge\SwingBackBadge(
+        $app['badgeRepository'],
+        $app['userRepository']
+    );
+});
+
 // Twig
 
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
@@ -136,5 +143,6 @@ $app->get('/setup', function() use($app) {
 $dispatcher = $app['dispatcher'];
 $dispatcher->addSubscriber($app['storeEventSubscriber']);
 $dispatcher->addSubscriber($app['superIdeaBadge']);
+$dispatcher->addSubscriber($app['swingBackBadge']);
 
 $app->run();
